@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Consumer",
+        "repositoryURL": "https://github.com/nicklockwood/Consumer",
+        "state": {
+          "branch": null,
+          "revision": "e7e3c12b9898d1cabb717f0d2db12914273b2b1c",
+          "version": "0.3.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

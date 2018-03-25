@@ -12,6 +12,7 @@ let package = Package(
             targets: ["SwiftGherkin"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/nicklockwood/Consumer", from: "0.3.2"),
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
