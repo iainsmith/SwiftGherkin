@@ -12,7 +12,7 @@ let package = Package(
             targets: ["SwiftGherkin"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/nicklockwood/Consumer", from: "0.3.2"),
+    .package(url: "https://github.com/iainsmith/Consumer.git", .branch("master")),
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -21,7 +21,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SwiftGherkin",
-            dependencies: []),
+            dependencies: ["Consumer"]),
         .testTarget(
             name: "SwiftGherkinTests",
             dependencies: ["SwiftGherkin"]),
