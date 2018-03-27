@@ -7,30 +7,17 @@
 
 import Foundation
 
-public struct Feature {
-    var name: String
-    var description: String?
-    var scenarios: [Scenario]
+public struct Feature: Codable {
+    public var name: String
+    public var description: String?
+    public var scenarios: [Scenario]
 }
 
-public struct ScenarioSimple {
-    var name: String
-    var description: String?
-    var steps: [Step]
-}
-
-public struct ScenarioOutline {
-    var name: String
-    var description: String?
-    var steps: [Step]
-    var examples: [String: String]
-}
-
-enum Scenario {
+public enum Scenario {
     case simple(ScenarioSimple)
     case outline(ScenarioOutline)
 
-    var steps: [Step] {
+    public var steps: [Step] {
         switch self {
         case .outline(let scenario):
             return scenario.steps
@@ -39,7 +26,7 @@ enum Scenario {
         }
     }
 
-    var description: String? {
+    public var description: String? {
         switch self {
         case .outline(let scenario):
             return scenario.description
@@ -47,13 +34,67 @@ enum Scenario {
             return scenario.description
         }
     }
+
+    public var examples: [Example]? {
+        switch self {
+        case .outline(let scenario):
+            return scenario.examples
+        case .simple:
+            return nil
+        }
+    }
 }
 
-public struct Step {
-    var name: StepName
-    var text: String
+public struct ScenarioSimple: Codable {
+    public var name: String
+    public var description: String?
+    public var steps: [Step]
 }
 
-enum StepName: String {
+public struct ScenarioOutline: Codable {
+    public var name: String
+    public var description: String?
+    public var steps: [Step]
+    public var examples: [Example]
+}
+
+public struct Example: Codable {
+    public var values: [String: String]
+}
+
+public struct Step: Codable {
+    public var name: StepName
+    public var text: String
+}
+
+public enum StepName: String, Codable {
     case given, when, then, and, but
+}
+
+extension Scenario: Codable {
+    enum CodingKeys: CodingKey {
+        case outline
+        case simple
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            let scenario = try container.decode(ScenarioSimple.self, forKey: .simple)
+            self = .simple(scenario)
+        } catch {
+            let scenario = try container.decode(ScenarioOutline.self, forKey: .outline)
+            self = .outline(scenario)
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .simple(let scenario):
+            try container.encode(scenario, forKey: .simple)
+        case .outline(let scenario):
+            try container.encode(scenario, forKey: .outline)
+        }
+    }
 }

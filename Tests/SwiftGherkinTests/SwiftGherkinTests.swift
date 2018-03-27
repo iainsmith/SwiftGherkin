@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftGherkin
+import SwiftGherkin
 import Consumer
 
 class SwiftGherkinTests: XCTestCase {
@@ -25,8 +25,16 @@ class SwiftGherkinTests: XCTestCase {
                    Feature: Minimal Scenario Outline
 
                    Scenario Outline: minimalistic
-                   Given I am a mountain
+                   Given I am a <mountain>
                    And I love chocolate
+
+                   Examples:
+                   | mountain |
+                   | etna     |
+                   | another  |
+                   | another  |
+                   | another  |
+                   | another  |
                    """
 
 
@@ -35,9 +43,34 @@ class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
         XCTAssertTrue(result.scenarios.first?.steps.count == 2)
-        if case Scenario.simple = result.scenarios.first!   {
-            XCTFail()
-        }
+        XCTAssertEqual(result.scenarios[0].steps[0].text, "I am a <mountain>")
+        XCTAssertEqual(result.scenarios[0].examples!.count, 5)
+        XCTAssertEqual(result.scenarios[0].examples![0].values, ["mountain": "etna"])
+    }
+
+    func testParsingSimpleFeatureFileWithMultipleVariable() throws {
+        let text = """
+                   Feature: Minimal Scenario Outline
+
+                   Scenario Outline: minimalistic
+                   Given I am a <mountain>
+                   And I love <chocolate>
+
+                   Examples:
+                   | mountain | chocolate |
+                   | etna | cadburys |
+                   | peak | galaxy |
+                   """
+
+
+
+        let result = try transformed(text)
+        XCTAssertEqual(result.name, "Minimal Scenario Outline")
+        XCTAssertTrue(result.scenarios.count == 1)
+        XCTAssertTrue(result.scenarios.first?.steps.count == 2)
+        XCTAssertEqual(result.scenarios[0].examples!.count, 2)
+        XCTAssertEqual(result.scenarios[0].examples![0].values,  ["mountain": "etna", "chocolate": "cadburys"])
+        XCTAssertEqual(result.scenarios[0].examples![1].values,  ["mountain": "peak", "chocolate": "galaxy"])
     }
 
     func testParsingFeatureFileWithMultipleScenarios() throws {
@@ -114,8 +147,6 @@ class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].description, "This is a scenario of the feature")
     }
 
-
-
     static var allTests = [
         ("testParsingSimpleFeatureFile", testParsingSimpleFeatureFile),
         ("testParsingSimpleFeatureFileWithVariable", testParsingSimpleFeatureFileWithVariable),
@@ -123,6 +154,5 @@ class SwiftGherkinTests: XCTestCase {
         ("testParsingFeatureFileWithDescription", testParsingFeatureFileWithDescription),
         ("testParsingFeatureFileWithMultiLineDescription", testParsingFeatureFileWithMultiLineDescription),
         ("testParsingFeatureFileWithScenarioDescription", testParsingFeatureFileWithScenarioDescription),
-
     ]
 }

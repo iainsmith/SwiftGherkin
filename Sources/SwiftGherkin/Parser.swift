@@ -2,7 +2,7 @@ import Consumer
 import Foundation
 
 enum GherkinLabel: String {
-    case feature, scenario, scenarioOutline, name, description, step
+    case feature, scenario, scenarioOutline, name, description, step, examples, exampleKeys, exampleValues
 }
 
 typealias GherkinConsumer = Consumer<GherkinLabel>
@@ -38,10 +38,26 @@ func makeParser() -> GherkinConsumer {
         .oneOrMore(step)]
     )
 
+    let discardedPipe: GherkinConsumer = .discard("|")
+
+    let tableRow: GherkinConsumer = [
+        .interleaved(discardedPipe, text),
+        newLines
+    ]
+
+    let example: GherkinConsumer = [
+        .discard("Examples:"),
+        newLines,
+        .label(.exampleKeys, tableRow),
+        .label(.exampleValues, .oneOrMore(tableRow)),
+        newLines
+    ]
+
     let scenarioOutlineName = makeLabelAndDescription(startText: "Scenario Outline:", ignoreText: stepKeywords)
     let scenarioOutline: GherkinConsumer = .label(.scenarioOutline, [
             scenarioOutlineName,
-            .oneOrMore(step)
+            .oneOrMore(step),
+            .label(.examples, example)
         ])
 
     let anyScenario: GherkinConsumer = scenario | scenarioOutline
