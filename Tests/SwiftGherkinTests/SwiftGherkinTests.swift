@@ -33,8 +33,11 @@ class SwiftGherkinTests: XCTestCase {
 
         let result = try transformed(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
-//        XCTAssertTrue(result.scenarios.count == 1)
-//        XCTAssertTrue(result.scenarios.first?.steps.count == 2)
+        XCTAssertTrue(result.scenarios.count == 1)
+        XCTAssertTrue(result.scenarios.first?.steps.count == 2)
+        if case Scenario.simple = result.scenarios.first!   {
+            XCTFail()
+        }
     }
 
     func testParsingFeatureFileWithMultipleScenarios() throws {
@@ -114,6 +117,12 @@ class SwiftGherkinTests: XCTestCase {
 
 
     static var allTests = [
-        ("testExample", testParsingSimpleFeatureFile),
+        ("testParsingSimpleFeatureFile", testParsingSimpleFeatureFile),
+        ("testParsingSimpleFeatureFileWithVariable", testParsingSimpleFeatureFileWithVariable),
+        ("testParsingFeatureFileWithMultipleScenarios", testParsingFeatureFileWithMultipleScenarios),
+        ("testParsingFeatureFileWithDescription", testParsingFeatureFileWithDescription),
+        ("testParsingFeatureFileWithMultiLineDescription", testParsingFeatureFileWithMultiLineDescription),
+        ("testParsingFeatureFileWithScenarioDescription", testParsingFeatureFileWithScenarioDescription),
+
     ]
 }

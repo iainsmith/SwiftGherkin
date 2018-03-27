@@ -38,9 +38,13 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
         var description: String? = values.safely(1) as? String ??  nil
         description = description?.trimmingCharacters(in: .whitespacesAndNewlines)
         let steps: [Step] = filterd(values, not: String.self)!
-        return Scenario(name: name, description: description, steps: steps)
+        return Scenario.simple(ScenarioSimple(name: name, description: description, steps: steps))
     case .scenarioOutline:
-        return nil
+        let name = values[0] as! String
+        var description: String? = values.safely(1) as? String ??  nil
+        description = description?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let steps: [Step] = filterd(values, not: String.self)!
+        return Scenario.outline(ScenarioOutline(name: name, description: description, steps: steps, examples: [:]))
     case .name:
         return values.first
     case .description:
