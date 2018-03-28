@@ -101,29 +101,24 @@ public enum StepName: String, Codable {
 }
 
 extension Scenario: Codable {
-    enum CodingKeys: CodingKey {
-        case outline
-        case simple
-    }
-
     public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
+        var container = try decoder.singleValueContainer()
         do {
-            let scenario = try container.decode(ScenarioSimple.self, forKey: .simple)
+            let scenario = try container.decode(ScenarioSimple.self)
             self = .simple(scenario)
         } catch {
-            let scenario = try container.decode(ScenarioOutline.self, forKey: .outline)
+            let scenario = try container.decode(ScenarioOutline.self)
             self = .outline(scenario)
         }
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.singleValueContainer()
         switch self {
         case .simple(let scenario):
-            try container.encode(scenario, forKey: .simple)
+            try container.encode(scenario)
         case .outline(let scenario):
-            try container.encode(scenario, forKey: .outline)
+            try container.encode(scenario)
         }
     }
 }
