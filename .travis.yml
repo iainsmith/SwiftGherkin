@@ -9,6 +9,6 @@ install:
   - bundle install --without=documentation
 script:
   - set -o pipefail
-  - swift package generate-xcodeproj
+  - swift package generate-xcodeproj --enable-code-coverage
   - xcodebuild -scheme Gherkin-Package -enableCodeCoverage YES clean build test
-after_success: bundle exec slather
+after_success: bundle exec xcov --project Gherkin.xcodeproj -s Gherkin-Package

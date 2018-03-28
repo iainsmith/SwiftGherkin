@@ -3,4 +3,5 @@
 source "https://rubygems.org"
 
 gem "jazzy"
-gem "slather"
+gem "xcov"
+gem "xcpretty"
