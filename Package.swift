@@ -11,7 +11,7 @@ let package = Package(
             targets: ["Gherkin"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/iainsmith/Consumer.git", .branch("master")),
+        .package(url: "https://github.com/nicklockwood/Consumer.git", .upToNextMinor(from: "0.3.3")),
     ],
     targets: [
         .target(

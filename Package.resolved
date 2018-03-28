@@ -3,11 +3,11 @@
     "pins": [
       {
         "package": "Consumer",
-        "repositoryURL": "https://github.com/iainsmith/Consumer.git",
+        "repositoryURL": "https://github.com/nicklockwood/Consumer.git",
         "state": {
-          "branch": "master",
-          "revision": "36db24ba79e0ab73da72141e14d15ed68ed76fd5",
-          "version": null
+          "branch": null,
+          "revision": "dc1641b218b6f74c4912f387eddf1af12757096f",
+          "version": "0.3.3"
         }
       }
     ]
