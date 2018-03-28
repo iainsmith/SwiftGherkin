@@ -18,12 +18,31 @@ public struct Feature: Codable {
         self.textDescription = description
         self.scenarios = scenarios
     }
+
+    public init(_ string: String) throws {
+        guard let result = try gherkin.match(string).transform(_transform) as? Feature else {
+            throw GherkinError.standard
+        }
+
+        self.name = result.name
+        self.textDescription = result.textDescription
+        self.scenarios = result.scenarios
+    }
+
+    public init(_ data: Data) throws {
+        guard let text = String(data: data, encoding: .utf8) else { throw GherkinError.standard }
+        try self.init(text)
+    }
 }
 
+/// A scenario that is either a Gherkin Scenario: or a Scenario Outline:
+///
+/// An outline scenario will include examples
 public enum Scenario {
     case simple(ScenarioSimple)
     case outline(ScenarioOutline)
 
+    /// The steps for this scenario
     public var steps: [Step] {
         switch self {
         case .outline(let scenario):
@@ -33,6 +52,7 @@ public enum Scenario {
         }
     }
 
+    /// The description (if any) for this scenario
     public var textDescription: String? {
         switch self {
         case .outline(let scenario):
@@ -42,6 +62,7 @@ public enum Scenario {
         }
     }
 
+    /// The examples if any for this scenario
     public var examples: [Example]? {
         switch self {
         case .outline(let scenario):
@@ -52,6 +73,7 @@ public enum Scenario {
     }
 }
 
+/// A gherkin Scenario: that does not have examples.
 public struct ScenarioSimple: Codable {
     public var name: String
     public var textDescription: String?
@@ -64,6 +86,7 @@ public struct ScenarioSimple: Codable {
     }
 }
 
+/// A gherkin Scenario Outline: with at least one example.
 public struct ScenarioOutline: Codable {
     public var name: String
     public var textDescription: String?
@@ -78,6 +101,7 @@ public struct ScenarioOutline: Codable {
     }
 }
 
+/// An individual gherkin example that may contain multiple variables.
 public struct Example: Codable {
     public var values: [String: String]
 
@@ -86,6 +110,7 @@ public struct Example: Codable {
     }
 }
 
+/// A gherkin step. e.g 'Given I am on the homepage`
 public struct Step: Codable {
     public var name: StepName
     public var text: String
@@ -96,6 +121,7 @@ public struct Step: Codable {
     }
 }
 
+/// The Step name
 public enum StepName: String, Codable {
     case given, when, then, and, but
 }

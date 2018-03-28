@@ -13,7 +13,7 @@ class SwiftGherkinTests: XCTestCase {
                    """
 
 
-        let result = try transformed(text)
+        let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
         XCTAssertTrue(result.scenarios.first?.steps.count == 2)
@@ -36,7 +36,7 @@ class SwiftGherkinTests: XCTestCase {
 
 
 
-        let result = try transformed(text)
+        let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 2)
         XCTAssertTrue(result.scenarios.first?.steps.count == 3)
@@ -45,18 +45,18 @@ class SwiftGherkinTests: XCTestCase {
 
     func testParsingFeatureFileWithDescription() throws {
         let text = """
-                   Feature: Minimal Scenario Outline
-                   This is a description of the feature
+                   Feature: Registration
+                   Users may want to register to save lists
 
-                   Scenario: minimalistic
-                   Given I am a mountain
+                   Scenario: Successful registration
+                   Given I am on the home screen
                    """
 
 
-        let result = try transformed(text)
-        XCTAssertEqual(result.name, "Minimal Scenario Outline")
+        let result = try Feature(text)
+        XCTAssertEqual(result.name, "Registration")
         XCTAssertTrue(result.scenarios.count == 1)
-        XCTAssertEqual(result.textDescription, "This is a description of the feature")
+        XCTAssertEqual(result.textDescription, "Users may want to register to save lists")
 
     }
 
@@ -71,7 +71,7 @@ class SwiftGherkinTests: XCTestCase {
                    """
 
 
-        let result = try transformed(text)
+        let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
         XCTAssertEqual(result.textDescription, "This is a description of the feature This is a description of the feature")
@@ -89,7 +89,7 @@ class SwiftGherkinTests: XCTestCase {
                    """
 
 
-        let result = try transformed(text)
+        let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
         XCTAssertEqual(result.scenarios[0].textDescription, "This is a scenario of the feature")
@@ -114,13 +114,17 @@ class SwiftGherkinTests: XCTestCase {
 
 
 
-        let result = try transformed(text)
+        let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
         XCTAssertTrue(result.scenarios.first?.steps.count == 2)
         XCTAssertEqual(result.scenarios[0].steps[0].text, "I am a <mountain>")
         XCTAssertEqual(result.scenarios[0].examples!.count, 5)
         XCTAssertEqual(result.scenarios[0].examples![0].values, ["mountain": "etna"])
+
+        let json = try JSONEncoder().encode(result)
+        XCTAssertNotNil(json)
+
     }
 
     func testParsingSimpleFeatureFileWithMultipleVariable() throws {
@@ -139,7 +143,7 @@ class SwiftGherkinTests: XCTestCase {
 
 
 
-        let result = try transformed(text)
+        let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
         XCTAssertTrue(result.scenarios.first?.steps.count == 2)

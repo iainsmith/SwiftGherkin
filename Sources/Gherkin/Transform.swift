@@ -8,18 +8,6 @@
 import Foundation
 import Consumer
 
-enum TransformError: Error {
-    case unknown
-}
-
-public func transformed(_ string: String) throws -> Feature {
-    guard let result = try gherkin.match(string).transform(_transform) as? Feature else {
-        throw TransformError.unknown
-    }
-
-    return result
-}
-
 func _transform(label: GherkinLabel, values: [Any]) -> Any? {
     switch label {
     case .feature:
