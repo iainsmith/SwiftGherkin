@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  swiftpm_4:
+    macos:
+      xcode: "9.2.0"
+    steps:
+      - checkout
+      - run: swift test --parallel
+
+  linux_swift_4:
+    docker:
+      - image: norionomura/swift:40
+    steps:
+      - checkout
+      - run: swift test --parallel
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - swiftpm_4
+      - linux_swift_4
