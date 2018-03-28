@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@testable import Consumer
+import Consumer
 
 enum TransformError: Error {
     case unknown
