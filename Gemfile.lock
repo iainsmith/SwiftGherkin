@@ -9,6 +9,7 @@ GEM
       tzinfo (~> 1.1)
     atomos (0.1.2)
     claide (1.0.2)
+    clamp (0.6.5)
     cocoapods (1.4.0)
       activesupport (>= 4.0.2, < 5)
       claide (>= 1.0.2, < 2.0)
@@ -61,12 +62,15 @@ GEM
       sqlite3 (~> 1.3)
       xcinvoke (~> 0.3.0)
     liferaft (0.0.6)
+    mini_portile2 (2.3.0)
     minitest (5.11.3)
     molinillo (0.6.5)
     mustache (0.99.8)
     nanaimo (0.2.4)
     nap (1.1.0)
     netrc (0.11.0)
+    nokogiri (1.8.2)
+      mini_portile2 (~> 2.3.0)
     open4 (1.3.4)
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
@@ -79,6 +83,11 @@ GEM
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
+    slather (2.4.0)
+      activesupport (>= 4.0.2, < 5)
+      clamp (~> 0.6)
+      nokogiri (~> 1.6)
+      xcodeproj (>= 0.20, < 2.0.0)
     sqlite3 (1.3.13)
     thread_safe (0.3.6)
     tzinfo (1.2.5)
@@ -97,6 +106,7 @@ PLATFORMS
 
 DEPENDENCIES
   jazzy
+  slather
 
 BUNDLED WITH
    1.16.1
