@@ -12,6 +12,6 @@ before_script:
 script:
   - set -o pipefail
   - swift package generate-xcodeproj --enable-code-coverage
-  - xcodebuild -scheme Gherkin-Package -enableCodeCoverage YES clean build test | $(bundle exec xcpretty)
+  - xcodebuild clean build test -scheme Gherkin-Package -enableCodeCoverage YES
 after_success: 
   - bundle exec xcov --project Gherkin.xcodeproj -s Gherkin-Package
