@@ -128,7 +128,7 @@ public enum StepName: String, Codable {
 
 extension Scenario: Codable {
     public init(from decoder: Decoder) throws {
-        var container = try decoder.singleValueContainer()
+        let container = try decoder.singleValueContainer()
         do {
             let scenario = try container.decode(ScenarioSimple.self)
             self = .simple(scenario)
