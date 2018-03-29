@@ -42,6 +42,15 @@ public enum Scenario {
     case simple(ScenarioSimple)
     case outline(ScenarioOutline)
 
+    public var name: String {
+        switch self {
+        case .outline(let scenario):
+            return scenario.name
+        case .simple(let scenario):
+            return scenario.name
+        }
+    }
+
     /// The steps for this scenario
     public var steps: [Step] {
         switch self {
