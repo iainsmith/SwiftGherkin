@@ -1,5 +1,7 @@
 # Gherkin
 
+[![Build Status](https://travis-ci.org/iainsmith/SwiftGherkin.svg?branch=master)](https://travis-ci.org/iainsmith/SwiftGherkin)
+
 A Swift package for working with gherkin based .feature files.
 
 Warning: This package only handles a limited subset of Gherkin. I'd like to improve this. If you would like to help, see the [Gherkin Subset](#Gherkin-Subset) section.
