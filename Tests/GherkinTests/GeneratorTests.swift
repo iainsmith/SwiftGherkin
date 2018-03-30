@@ -8,47 +8,6 @@
 import XCTest
 @testable import GherkinCLILib
 import Gherkin
-import Files
-
-class BootstrapTests: XCTestCase {
-    var featureText: String!
-
-    override func setUp() {
-        super.setUp()
-        featureText =
-            """
-            Feature: User Registration
-            Scenario: Successful Registration
-            Given I am on the homepage
-            And I don't have an account
-
-            Scenario: Existing Registration
-            Given I am on the homepage
-            And I have an account
-            """
-    }
-
-    func testSyncingAFolder () throws {
-        let filesystem = FileSystem()
-        let temp = filesystem.temporaryFolder
-        let name = "gherkinFeatureTests"
-
-        let folder = try temp.createSubfolderIfNeeded(withName: name)
-        let features = try folder.createSubfolderIfNeeded(withName: "Features")
-        let tests = try folder.createSubfolderIfNeeded(withName: "Tests")
-
-
-        try [features, tests].forEach { try $0.empty() }
-
-        let tempFeature = try features.createFile(named: "User Registration.feature", contents: featureText)
-
-        let result = try GherkinSync.syncTests(featurePath: features.path, outputPath: tests.path, generator: XCTestGenerator.self)
-        XCTAssertEqual(result.updated.count, 1)
-        XCTAssertEqual(result.failed.count, 0)
-
-        try tempFeature.delete()
-    }
-}
 
 class XCTestGeneratorTests: XCTestCase {
     var feature: Feature!
@@ -107,7 +66,7 @@ class XCTestGeneratorTests: XCTestCase {
     }
 
     func testFileName() throws {
-        let result = XCTestGenerator.fileName(for: feature)
+        let result = XCTestGenerator.featureFileName(for: feature)
         XCTAssertEqual(result, "UserRegistrationFeatureTests.swift")
     }
 }

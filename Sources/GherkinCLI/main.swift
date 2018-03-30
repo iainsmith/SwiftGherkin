@@ -9,6 +9,8 @@ Group() {
     let outputDirectory = Option<String>("output", default: "Tests", description: "The path to write tests to")
 
     $0.command("sync", featureDirectory, outputDirectory) { featurePath, outputPath in
-        _ = try GherkinSync.syncTests(featurePath: featurePath, outputPath: outputPath, generator: XCTestGenerator.self)
+        _ = try GherkinSync.generateTestCode(fromFeatureFolderPath: featurePath,
+                                             toOutputPath: outputPath,
+                                             using: XCTestGenerator.self)
     }
 }.run()
