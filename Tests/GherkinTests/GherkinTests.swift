@@ -18,6 +18,7 @@ class SwiftGherkinTests: XCTestCase {
         XCTAssertTrue(result.scenarios.count == 1)
         XCTAssertTrue(result.scenarios.first?.steps.count == 2)
         XCTAssertTrue(result.scenarios.first?.steps[0].text == "I am a mountain")
+        XCTAssertEqual(result.scenarios[0].name, "minimalistic")
     }
 
     func testParsingFeatureFileWithMultipleScenarios() throws {
