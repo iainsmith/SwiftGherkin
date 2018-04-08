@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftGherkinTests
+@testable import GherkinTests
 
 XCTMain([
     testCase(SwiftGherkinTests.allTests),

@@ -1,17 +1,25 @@
-language: swift
+language: generic
+sudo: required
+dist: trusty
 osx_image: xcode9
-
+os:
+  - linux
+  - osx
 env:
-  - LC_CTYPE=en_US.UTF-8 LANG=en_US.UTF-8
+  - SWIFT_VERSION=4.0
+  - SWIFT_VERSION=4.1
 before_install:
   - rvm install ruby-2.4.2
 install:
+  - eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
+  - swiftenv install $SWIFT_VERSION || true
   - bundle install --without=documentation
 before_script:
   - bundle exec danger
 script:
   - set -o pipefail
-  - swift package generate-xcodeproj --enable-code-coverage
-  - xcodebuild clean build test -scheme Gherkin-Package | bundle exec xcpretty -f `bundle exec xcpretty-travis-formatter`
-after_success: 
-  - bundle exec xcov --project Gherkin.xcodeproj -s Gherkin-Package --coveralls_service_name travis-ci
+  - swift test
+matrix:
+  allow_failures:
+  - os: linux
+    env: SWIFT_VERSION=4.1
