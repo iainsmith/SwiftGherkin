@@ -19,7 +19,4 @@ before_script:
 script:
   - set -o pipefail
   - swift test
-matrix:
-  allow_failures:
-  - os: linux
-    env: SWIFT_VERSION=4.1
+
