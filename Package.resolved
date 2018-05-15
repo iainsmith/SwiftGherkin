@@ -2,39 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "Commander",
-        "repositoryURL": "https://github.com/kylef/Commander",
-        "state": {
-          "branch": null,
-          "revision": "e5b50ad7b2e91eeb828393e89b03577b16be7db9",
-          "version": "0.8.0"
-        }
-      },
-      {
         "package": "Consumer",
         "repositoryURL": "https://github.com/nicklockwood/Consumer.git",
         "state": {
           "branch": null,
-          "revision": "dc1641b218b6f74c4912f387eddf1af12757096f",
-          "version": "0.3.3"
-        }
-      },
-      {
-        "package": "Files",
-        "repositoryURL": "https://github.com/JohnSundell/Files",
-        "state": {
-          "branch": null,
-          "revision": "06f95bd1bf4f8d5f50bc6bb30b808c253acd4c88",
-          "version": "2.2.1"
-        }
-      },
-      {
-        "package": "Spectre",
-        "repositoryURL": "https://github.com/kylef/Spectre.git",
-        "state": {
-          "branch": null,
-          "revision": "e34d5687e1e9d865e3527dd58bc2f7464ef6d936",
-          "version": "0.8.0"
+          "revision": "edd5f97cded19baca7bb47867abc0ab736ac7481",
+          "version": "0.3.4"
         }
       }
     ]
