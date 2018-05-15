@@ -23,8 +23,8 @@ func makeParser() -> GherkinConsumer {
         let start = GherkinConsumer.string(startText)
         return [
             .label(.name, .flatten([.discard(start), whitespace, text, newLines])),
-            .optional(.label(.description, .flatten(.oneOrMore([.not(ignoreText), text, .replace("\n", " "), newLines]))))
-            ]
+            .optional(.label(.description, .flatten(.oneOrMore([.not(ignoreText), text, .replace("\n", " "), newLines])))),
+        ]
     }
 
     let feature: GherkinConsumer = makeLabelAndDescription(startText: "Feature:", ignoreText: "Scenario:" | "Scenario Outline:")
@@ -35,14 +35,15 @@ func makeParser() -> GherkinConsumer {
     let scenarioName: GherkinConsumer = makeLabelAndDescription(startText: "Scenario:", ignoreText: stepKeywords)
     let scenario: GherkinConsumer = .label(.scenario, [
         scenarioName,
-        .oneOrMore(step)]
+        .oneOrMore(step),
+    ]
     )
 
     let discardedPipe: GherkinConsumer = .discard("|")
 
     let tableRow: GherkinConsumer = [
         .interleaved(discardedPipe, text),
-        newLines
+        newLines,
     ]
 
     let example: GherkinConsumer = [
@@ -50,20 +51,20 @@ func makeParser() -> GherkinConsumer {
         newLines,
         .label(.exampleKeys, tableRow),
         .label(.exampleValues, .oneOrMore(tableRow)),
-        newLines
+        newLines,
     ]
 
     let scenarioOutlineName = makeLabelAndDescription(startText: "Scenario Outline:", ignoreText: stepKeywords)
     let scenarioOutline: GherkinConsumer = .label(.scenarioOutline, [
-            scenarioOutlineName,
-            .oneOrMore(step),
-            .label(.examples, example)
-        ])
+        scenarioOutlineName,
+        .oneOrMore(step),
+        .label(.examples, example),
+    ])
 
     let anyScenario: GherkinConsumer = scenario | scenarioOutline
     let gherkin: GherkinConsumer = .label(.feature, [
         feature,
-        .oneOrMore(anyScenario)
+        .oneOrMore(anyScenario),
     ])
     return gherkin
 }

@@ -15,7 +15,7 @@ public struct Feature: Codable {
 
     public init(name: String, description: String?, scenarios: [Scenario]) {
         self.name = name
-        self.textDescription = description
+        textDescription = description
         self.scenarios = scenarios
     }
 
@@ -24,9 +24,9 @@ public struct Feature: Codable {
             throw GherkinError.standard
         }
 
-        self.name = result.name
-        self.textDescription = result.textDescription
-        self.scenarios = result.scenarios
+        name = result.name
+        textDescription = result.textDescription
+        scenarios = result.scenarios
     }
 
     public init(_ data: Data) throws {
@@ -44,9 +44,9 @@ public enum Scenario {
 
     public var name: String {
         switch self {
-        case .outline(let scenario):
+        case let .outline(scenario):
             return scenario.name
-        case .simple(let scenario):
+        case let .simple(scenario):
             return scenario.name
         }
     }
@@ -54,9 +54,9 @@ public enum Scenario {
     /// The steps for this scenario
     public var steps: [Step] {
         switch self {
-        case .outline(let scenario):
+        case let .outline(scenario):
             return scenario.steps
-        case .simple(let scenario):
+        case let .simple(scenario):
             return scenario.steps
         }
     }
@@ -64,9 +64,9 @@ public enum Scenario {
     /// The description (if any) for this scenario
     public var textDescription: String? {
         switch self {
-        case .outline(let scenario):
+        case let .outline(scenario):
             return scenario.textDescription
-        case .simple(let scenario):
+        case let .simple(scenario):
             return scenario.textDescription
         }
     }
@@ -74,7 +74,7 @@ public enum Scenario {
     /// The examples if any for this scenario
     public var examples: [Example]? {
         switch self {
-        case .outline(let scenario):
+        case let .outline(scenario):
             return scenario.examples
         case .simple:
             return nil
@@ -90,7 +90,7 @@ public struct ScenarioSimple: Codable {
 
     public init(name: String, description: String?, steps: [Step]) {
         self.name = name
-        self.textDescription = description
+        textDescription = description
         self.steps = steps
     }
 }
@@ -104,7 +104,7 @@ public struct ScenarioOutline: Codable {
 
     public init(name: String, description: String?, steps: [Step], examples: [Example]) {
         self.name = name
-        self.textDescription = description
+        textDescription = description
         self.steps = steps
         self.examples = examples
     }
@@ -150,9 +150,9 @@ extension Scenario: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .simple(let scenario):
+        case let .simple(scenario):
             try container.encode(scenario)
-        case .outline(let scenario):
+        case let .outline(scenario):
             try container.encode(scenario)
         }
     }

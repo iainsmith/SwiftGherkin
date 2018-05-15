@@ -5,14 +5,14 @@
 //  Created by iainsmith on 26/03/2018.
 //
 
-import Foundation
 import Consumer
+import Foundation
 
 func _transform(label: GherkinLabel, values: [Any]) -> Any? {
     switch label {
     case .feature:
         guard let name = values.first as? String else { return nil }
-        var description: String? = values.safely(1) as? String ??  nil
+        var description: String? = values.safely(1) as? String ?? nil
         description?.trimWhitespace()
         let scenarios: [Scenario] = filterd(values, is: Scenario.self)!
         let feature = Feature(name: name, description: description, scenarios: scenarios)
@@ -23,13 +23,13 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
         return Step(name: name, text: text)
     case .scenario:
         let name = values[0] as! String
-        var description: String? = values.safely(1) as? String ??  nil
+        var description: String? = values.safely(1) as? String ?? nil
         description?.trimWhitespace()
         let steps: [Step] = filterd(values, is: Step.self)!
         return Scenario.simple(ScenarioSimple(name: name, description: description, steps: steps))
     case .scenarioOutline:
         let name = values[0] as! String
-        var description: String? = values.safely(1) as? String ??  nil
+        var description: String? = values.safely(1) as? String ?? nil
         description?.trimWhitespace()
         let steps: [Step] = filterd(values, is: Step.self)!
         let examples = values.last as! [Example]
@@ -56,15 +56,15 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
 
 extension String {
     mutating func trimWhitespace() {
-        self = self.trimmingCharacters(in: .whitespacesAndNewlines)
+        self = trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     func trimmedWhitespace() -> String {
-        return self.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
 
-private func filterd<T,E>(_ values: [Any], is filteredType: E.Type) -> [T]? {
+private func filterd<T, E>(_ values: [Any], is filteredType: E.Type) -> [T]? {
     guard let result = Array(values.filter { type(of: $0) == filteredType }) as? [T] else { return nil }
     return result
 }
@@ -81,7 +81,7 @@ extension Array {
     func chuncked(by: Int) -> [[Element]] {
         return stride(from: 0, to: count, by: by).map { current in
             let end = current + by
-            return Array(self[current..<end])
+            return Array(self[current ..< end])
         }
     }
 }

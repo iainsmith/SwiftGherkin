@@ -1,17 +1,16 @@
-import XCTest
-import Gherkin
 import Consumer
+import Gherkin
+import XCTest
 
 class SwiftGherkinTests: XCTestCase {
     func testParsingSimpleFeatureFile() throws {
         let text = """
-                   Feature: Minimal Scenario Outline
+        Feature: Minimal Scenario Outline
 
-                   Scenario: minimalistic
-                   Given I am a mountain
-                   And I love chocolate
-                   """
-
+        Scenario: minimalistic
+        Given I am a mountain
+        And I love chocolate
+        """
 
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
@@ -23,19 +22,17 @@ class SwiftGherkinTests: XCTestCase {
 
     func testParsingFeatureFileWithMultipleScenarios() throws {
         let text = """
-                   Feature: Minimal Scenario Outline
+        Feature: Minimal Scenario Outline
 
-                   Scenario: minimalistic
-                   Given I am a mountain
-                   And I love chocolate
-                   And I love chocolate
+        Scenario: minimalistic
+        Given I am a mountain
+        And I love chocolate
+        And I love chocolate
 
-                   Scenario: minimalistic
-                   Given I am a mountain
-                   And I love chocolate
-                   """
-
-
+        Scenario: minimalistic
+        Given I am a mountain
+        And I love chocolate
+        """
 
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
@@ -46,49 +43,44 @@ class SwiftGherkinTests: XCTestCase {
 
     func testParsingFeatureFileWithDescription() throws {
         let text = """
-                   Feature: Registration
-                   Users may want to register to save lists
+        Feature: Registration
+        Users may want to register to save lists
 
-                   Scenario: Successful registration
-                   Given I am on the home screen
-                   """
-
+        Scenario: Successful registration
+        Given I am on the home screen
+        """
 
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Registration")
         XCTAssertTrue(result.scenarios.count == 1)
         XCTAssertEqual(result.textDescription, "Users may want to register to save lists")
-
     }
 
     func testParsingFeatureFileWithMultiLineDescription() throws {
         let text = """
-                   Feature: Minimal Scenario Outline
-                   This is a description of the feature
-                   This is a description of the feature
+        Feature: Minimal Scenario Outline
+        This is a description of the feature
+        This is a description of the feature
 
-                   Scenario: minimalistic
-                   Given I am a mountain
-                   """
-
+        Scenario: minimalistic
+        Given I am a mountain
+        """
 
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
         XCTAssertEqual(result.textDescription, "This is a description of the feature This is a description of the feature")
-
     }
 
     func testParsingFeatureFileWithScenarioDescription() throws {
         let text = """
-                   Feature: Minimal Scenario Outline
+        Feature: Minimal Scenario Outline
 
-                   Scenario: minimalistic
-                   This is a scenario of the feature
+        Scenario: minimalistic
+        This is a scenario of the feature
 
-                   Given I am a mountain
-                   """
-
+        Given I am a mountain
+        """
 
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
@@ -98,22 +90,20 @@ class SwiftGherkinTests: XCTestCase {
 
     func testParsingSimpleFeatureFileWithVariable() throws {
         let text = """
-                   Feature: Minimal Scenario Outline
+        Feature: Minimal Scenario Outline
 
-                   Scenario Outline: minimalistic
-                   Given I am a <mountain>
-                   And I love chocolate
+        Scenario Outline: minimalistic
+        Given I am a <mountain>
+        And I love chocolate
 
-                   Examples:
-                   | mountain |
-                   | etna     |
-                   | another  |
-                   | another  |
-                   | another  |
-                   | another  |
-                   """
-
-
+        Examples:
+        | mountain |
+        | etna     |
+        | another  |
+        | another  |
+        | another  |
+        | another  |
+        """
 
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
@@ -125,50 +115,47 @@ class SwiftGherkinTests: XCTestCase {
 
         let json = try JSONEncoder().encode(result)
         XCTAssertNotNil(json)
-
     }
 
     func testParsingSimpleFeatureFileWithMultipleVariable() throws {
         let text = """
-                   Feature: Minimal Scenario Outline
+        Feature: Minimal Scenario Outline
 
-                   Scenario Outline: minimalistic
-                   Given I am a <mountain>
-                   And I love <chocolate>
+        Scenario Outline: minimalistic
+        Given I am a <mountain>
+        And I love <chocolate>
 
-                   Examples:
-                   | mountain | chocolate |
-                   | etna | cadburys |
-                   | peak | galaxy |
-                   """
-
-
+        Examples:
+        | mountain | chocolate |
+        | etna | cadburys |
+        | peak | galaxy |
+        """
 
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
         XCTAssertTrue(result.scenarios.first?.steps.count == 2)
         XCTAssertEqual(result.scenarios[0].examples!.count, 2)
-        XCTAssertEqual(result.scenarios[0].examples![0].values,  ["mountain": "etna", "chocolate": "cadburys"])
-        XCTAssertEqual(result.scenarios[0].examples![1].values,  ["mountain": "peak", "chocolate": "galaxy"])
+        XCTAssertEqual(result.scenarios[0].examples![0].values, ["mountain": "etna", "chocolate": "cadburys"])
+        XCTAssertEqual(result.scenarios[0].examples![1].values, ["mountain": "peak", "chocolate": "galaxy"])
     }
 
     func testCreatingAFeatureInCode() {
         let feature = Feature(name: "Registration",
                               description: nil,
                               scenarios: [
-                                Scenario
-                                    .simple(ScenarioSimple(name: "Successful email registration",
-                                                           description: "",
-                                                           steps: [
-                                                            Step(name: .given, text: "I am on the homepsage"),
-                                                            Step(name: .when, text: "I tap register"),
-                                                            Step(name: .and, text: "I enter valid registration details"),
-                                                            Step(name: .then, text: "I am shown the registration confirmation screen")
-                                    ]))
+                                  Scenario
+                                      .simple(ScenarioSimple(name: "Successful email registration",
+                                                             description: "",
+                                                             steps: [
+                                                                 Step(name: .given, text: "I am on the homepsage"),
+                                                                 Step(name: .when, text: "I tap register"),
+                                                                 Step(name: .and, text: "I enter valid registration details"),
+                                                                 Step(name: .then, text: "I am shown the registration confirmation screen"),
+                                      ])),
 
-            ])
-        
+        ])
+
         XCTAssertNotNil(feature)
     }
 
