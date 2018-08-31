@@ -50,7 +50,7 @@ public enum Scenario {
             return scenario.name
         }
     }
-    
+
     /// The tags if any for this scenario
     public var tags: [Tag] {
         switch self {
@@ -146,7 +146,7 @@ public struct Step: Codable {
 
 public struct Tag: Codable {
     public let tagName: String
-    
+
     public init(_ tagName: String) {
         self.tagName = tagName
     }

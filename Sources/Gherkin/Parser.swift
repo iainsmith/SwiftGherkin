@@ -26,11 +26,11 @@ func makeParser() -> GherkinConsumer {
             .optional(.label(.description, .flatten(.oneOrMore([.not(ignoreText), text, .replace("\n", " "), newLines])))),
         ]
     }
-    
+
     let tagText: GherkinConsumer = .flatten(.oneOrMore(.anyCharacter(except: newLinesSet.union(CharacterSet(charactersIn: "@")))))
 
     let tag: GherkinConsumer = .label(.tag, .sequence([.discard("@"), tagText, .optional(whitespace), .optional(newLines)]))
-    
+
     let feature: GherkinConsumer = makeLabelAndDescription(startText: "Feature:", ignoreText: "Scenario:" | "Scenario Outline:" | ["@", text])
 
     let stepKeywords: GherkinConsumer = "Given" | "When" | "Then" | "And" | "But"
