@@ -50,6 +50,16 @@ public enum Scenario {
             return scenario.name
         }
     }
+    
+    /// The tags if any for this scenario
+    public var tags: [Tag] {
+        switch self {
+        case let .outline(scenario):
+            return scenario.tags
+        case let .simple(scenario):
+            return scenario.tags
+        }
+    }
 
     /// The steps for this scenario
     public var steps: [Step] {
@@ -84,11 +94,13 @@ public enum Scenario {
 
 /// A gherkin Scenario: that does not have examples.
 public struct ScenarioSimple: Codable {
+    public var tags: [Tag]
     public var name: String
     public var textDescription: String?
     public var steps: [Step]
 
-    public init(name: String, description: String?, steps: [Step]) {
+    public init(tags: [Tag], name: String, description: String?, steps: [Step]) {
+        self.tags = tags
         self.name = name
         textDescription = description
         self.steps = steps
@@ -97,13 +109,15 @@ public struct ScenarioSimple: Codable {
 
 /// A gherkin Scenario Outline: with at least one example.
 public struct ScenarioOutline: Codable {
+    public var tags: [Tag]
     public var name: String
     public var textDescription: String?
     public var steps: [Step]
     public var examples: [Example]
 
-    public init(name: String, description: String?, steps: [Step], examples: [Example]) {
+    public init(tags: [Tag], name: String, description: String?, steps: [Step], examples: [Example]) {
         self.name = name
+        self.tags = tags
         textDescription = description
         self.steps = steps
         self.examples = examples
