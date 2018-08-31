@@ -22,18 +22,22 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
         let text = values[1] as! String
         return Step(name: name, text: text)
     case .scenario:
-        let name = values[0] as! String
-        var description: String? = values.safely(1) as? String ?? nil
+        let strings: [String] = filterd(values, is: String.self)!
+        let name = strings[0]
+        var description: String? = strings.safely(1) ?? nil
         description?.trimWhitespace()
         let steps: [Step] = filterd(values, is: Step.self)!
-        return Scenario.simple(ScenarioSimple(name: name, description: description, steps: steps))
+        let tags: [Tag] = filterd(values, is: Tag.self) ?? []
+        return Scenario.simple(ScenarioSimple(tags: tags, name: name, description: description, steps: steps))
     case .scenarioOutline:
-        let name = values[0] as! String
-        var description: String? = values.safely(1) as? String ?? nil
+        let strings: [String] = filterd(values, is: String.self)!
+        let name = strings[0]
+        var description: String? = strings.safely(1) ?? nil
         description?.trimWhitespace()
         let steps: [Step] = filterd(values, is: Step.self)!
+        let tags: [Tag] = filterd(values, is: Tag.self) ?? []
         let examples = values.last as! [Example]
-        return Scenario.outline(ScenarioOutline(name: name, description: description, steps: steps, examples: examples))
+        return Scenario.outline(ScenarioOutline(tags: tags, name: name, description: description, steps: steps, examples: examples))
     case .name:
         return values.first
     case .description:
@@ -51,6 +55,8 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
         return (values as! [String]).map { $0.trimmedWhitespace() }
     case .exampleValues:
         return (values as! [String]).map { $0.trimmedWhitespace() }
+    case .tag:
+        return Tag((values[0] as! String).trimmedWhitespace())
     }
 }
 
