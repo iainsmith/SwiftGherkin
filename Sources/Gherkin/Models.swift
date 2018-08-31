@@ -130,6 +130,14 @@ public struct Step: Codable {
     }
 }
 
+public struct Tag: Codable {
+    public let tagName: String
+    
+    public init(_ tagName: String) {
+        self.tagName = tagName
+    }
+}
+
 /// The Step name
 public enum StepName: String, Codable {
     case given, when, then, and, but
