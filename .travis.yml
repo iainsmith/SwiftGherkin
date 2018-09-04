@@ -8,14 +8,9 @@ os:
 env:
   - SWIFT_VERSION=4.0
   - SWIFT_VERSION=4.1
-before_install:
-  - rvm install ruby-2.4.2
 install:
   - eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
   - swiftenv install $SWIFT_VERSION || true
-  - bundle install --without=documentation
-before_script:
-  - bundle exec danger
 script:
   - set -o pipefail
   - swift test
