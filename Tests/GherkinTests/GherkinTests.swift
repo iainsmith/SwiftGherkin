@@ -36,7 +36,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertTrue(result.scenarios.first?.steps.count == 2)
         XCTAssertTrue(result.scenarios.first?.steps[0].text == "I am a mountain")
         XCTAssertEqual(result.scenarios[0].name, "minimalistic")
-        XCTAssertEqual(result.scenarios[0].tags[0].name, "testTag")
+        XCTAssertEqual(result.scenarios[0].tags?[0].name, "testTag")
     }
 
     func testParsingSimpleFeatureFileWithMultipleTags() throws {
@@ -55,7 +55,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertTrue(result.scenarios.first?.steps.count == 2)
         XCTAssertTrue(result.scenarios.first?.steps[0].text == "I am a mountain")
         XCTAssertEqual(result.scenarios[0].name, "minimalistic")
-        XCTAssertEqual(result.scenarios[0].tags.map { $0.name }, ["testTag", "testTag2"])
+        XCTAssertEqual(result.scenarios[0].tags?.map { $0.name }, ["testTag", "testTag2"])
     }
 
     func testParsingFeatureFileWithMultipleScenarios() throws {
@@ -200,7 +200,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].examples!.count, 2)
         XCTAssertEqual(result.scenarios[0].examples![0].values, ["mountain": "etna", "chocolate": "cadburys"])
         XCTAssertEqual(result.scenarios[0].examples![1].values, ["mountain": "peak", "chocolate": "galaxy"])
-        XCTAssertEqual(result.scenarios[0].tags[0].name, "testTag")
+        XCTAssertEqual(result.scenarios[0].tags?[0].name, "testTag")
     }
 
     func testParsingSimpleFeatureFileWithMultipleVariableAndTags() throws {
@@ -225,7 +225,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].examples!.count, 2)
         XCTAssertEqual(result.scenarios[0].examples![0].values, ["mountain": "etna", "chocolate": "cadburys"])
         XCTAssertEqual(result.scenarios[0].examples![1].values, ["mountain": "peak", "chocolate": "galaxy"])
-        XCTAssertEqual(result.scenarios[0].tags.map { $0.name }, ["testTag", "testTag2", "testTag3"])
+        XCTAssertEqual(result.scenarios[0].tags?.map { $0.name }, ["testTag", "testTag2", "testTag3"])
     }
 
     func testCreatingAFeatureInCode() {
