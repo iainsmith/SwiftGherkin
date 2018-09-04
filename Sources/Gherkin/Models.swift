@@ -145,10 +145,10 @@ public struct Step: Codable {
 }
 
 public struct Tag: Codable {
-    public let tagName: String
+    public let name: String
 
-    public init(_ tagName: String) {
-        self.tagName = tagName
+    public init(_ name: String) {
+        self.name = name
     }
 }
 
