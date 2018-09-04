@@ -1,13 +1,14 @@
 language: generic
 sudo: required
 dist: trusty
-osx_image: xcode9
+osx_image: xcode10
 os:
   - linux
   - osx
 env:
   - SWIFT_VERSION=4.0
   - SWIFT_VERSION=4.1
+  - SWIFT_VERSION=4.2-DEVELOPMENT-SNAPSHOT-2018-08-25-a
 install:
   - eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
   - swiftenv install $SWIFT_VERSION || true
