@@ -28,7 +28,7 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
         description?.trimWhitespace()
         let steps: [Step] = filterd(values, is: Step.self)!
         let tags: [Tag] = filterd(values, is: Tag.self) ?? []
-        return Scenario.simple(ScenarioSimple(tags: tags, name: name, description: description, steps: steps))
+        return Scenario.simple(ScenarioSimple(name: name, description: description, steps: steps, tags: tags))
     case .scenarioOutline:
         let strings: [String] = filterd(values, is: String.self)!
         let name = strings[0]
@@ -37,7 +37,7 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
         let steps: [Step] = filterd(values, is: Step.self)!
         let tags: [Tag] = filterd(values, is: Tag.self) ?? []
         let examples = values.last as! [Example]
-        return Scenario.outline(ScenarioOutline(tags: tags, name: name, description: description, steps: steps, examples: examples))
+        return Scenario.outline(ScenarioOutline(name: name, description: description, steps: steps, examples: examples, tags: tags))
     case .name:
         return values.first
     case .description:

@@ -233,7 +233,7 @@ final class SwiftGherkinTests: XCTestCase {
                               description: nil,
                               scenarios: [
                                   Scenario
-                                      .simple(ScenarioSimple(tags: [], name: "Successful email registration",
+                                      .simple(ScenarioSimple(name: "Successful email registration",
                                                              description: "",
                                                              steps: [
                                                                  Step(name: .given, text: "I am on the homepsage"),

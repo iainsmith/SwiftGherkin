@@ -99,7 +99,7 @@ public struct ScenarioSimple: Codable {
     public var textDescription: String?
     public var steps: [Step]
 
-    public init(tags: [Tag], name: String, description: String?, steps: [Step]) {
+    public init(name: String, description: String?, steps: [Step], tags: [Tag] = []) {
         self.tags = tags
         self.name = name
         textDescription = description
@@ -115,7 +115,7 @@ public struct ScenarioOutline: Codable {
     public var steps: [Step]
     public var examples: [Example]
 
-    public init(tags: [Tag], name: String, description: String?, steps: [Step], examples: [Example]) {
+    public init(name: String, description: String?, steps: [Step], examples: [Example], tags: [Tag] = []) {
         self.name = name
         self.tags = tags
         textDescription = description
