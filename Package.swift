@@ -9,7 +9,7 @@ let package = Package(
         .library(name: "Gherkin", targets: ["Gherkin"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/nicklockwood/Consumer.git", .upToNextMinor(from: "0.3.3")),
+        .package(url: "https://github.com/nicklockwood/Consumer.git", .upToNextMinor(from: "0.3.4")),
     ],
     targets: [
         .target(
