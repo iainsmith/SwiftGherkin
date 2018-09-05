@@ -19,6 +19,23 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertTrue(result.scenarios.first?.steps[0].text == "I am a mountain")
         XCTAssertEqual(result.scenarios[0].name, "minimalistic")
     }
+    
+    func testParsingSimpleFeatureFileWithIndentation() throws {
+        let text = """
+        Feature: Minimal Scenario Outline
+
+        Scenario: minimalistic
+            Given I am a mountain
+            And I love chocolate
+        """
+        
+        let result = try Feature(text)
+        XCTAssertEqual(result.name, "Minimal Scenario Outline")
+        XCTAssertTrue(result.scenarios.count == 1)
+        XCTAssertTrue(result.scenarios.first?.steps.count == 2)
+        XCTAssertTrue(result.scenarios.first?.steps[0].text == "I am a mountain")
+        XCTAssertEqual(result.scenarios[0].name, "minimalistic")
+    }
 
     func testParsingSimpleFeatureFileWithTag() throws {
         let text = """
@@ -151,6 +168,35 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].examples!.count, 5)
         XCTAssertEqual(result.scenarios[0].examples![0].values, ["mountain": "etna"])
 
+        let json = try JSONEncoder().encode(result)
+        XCTAssertNotNil(json)
+    }
+    
+    func testParsingSimpleFeatureFileWithVariableWithIndentation() throws {
+        let text = """
+        Feature: Minimal Scenario Outline
+
+        Scenario Outline: minimalistic
+            Given I am a <mountain>
+            And I love chocolate
+
+            Examples:
+                | mountain |
+                | etna     |
+                | another  |
+                | another  |
+                | another  |
+                | another  |
+        """
+        
+        let result = try Feature(text)
+        XCTAssertEqual(result.name, "Minimal Scenario Outline")
+        XCTAssertTrue(result.scenarios.count == 1)
+        XCTAssertTrue(result.scenarios.first?.steps.count == 2)
+        XCTAssertEqual(result.scenarios[0].steps[0].text, "I am a <mountain>")
+        XCTAssertEqual(result.scenarios[0].examples!.count, 5)
+        XCTAssertEqual(result.scenarios[0].examples![0].values, ["mountain": "etna"])
+        
         let json = try JSONEncoder().encode(result)
         XCTAssertNotNil(json)
     }
