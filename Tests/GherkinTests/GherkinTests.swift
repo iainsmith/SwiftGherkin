@@ -295,6 +295,7 @@ final class SwiftGherkinTests: XCTestCase {
 
     static var allTests = [
         ("testParsingSimpleFeatureFile", testParsingSimpleFeatureFile),
+        ("testParsingSimpleFeatureFileWithIndentation", testParsingSimpleFeatureFileWithIndentation),
         ("testParsingSimpleFeatureFileWithTag", testParsingSimpleFeatureFileWithTag),
         ("testParsingSimpleFeatureFileWithMultipleTags", testParsingSimpleFeatureFileWithMultipleTags),
         ("testParsingSimpleFeatureFileWithVariable", testParsingSimpleFeatureFileWithVariable),
@@ -303,6 +304,7 @@ final class SwiftGherkinTests: XCTestCase {
         ("testParsingFeatureFileWithMultiLineDescription", testParsingFeatureFileWithMultiLineDescription),
         ("testParsingFeatureFileWithScenarioDescription", testParsingFeatureFileWithScenarioDescription),
         ("testParsingSimpleFeatureFileWithVariable", testParsingSimpleFeatureFileWithVariable),
+        ("testParsingSimpleFeatureFileWithVariableWithIndentation", testParsingSimpleFeatureFileWithVariableWithIndentation),
         ("testParsingSimpleFeatureFileWithMultipleVariable", testParsingSimpleFeatureFileWithMultipleVariable),
         ("testParsingSimpleFeatureFileWithMultipleVariableAndTag", testParsingSimpleFeatureFileWithMultipleVariableAndTag),
         ("testParsingSimpleFeatureFileWithMultipleVariableAndTags", testParsingSimpleFeatureFileWithMultipleVariableAndTags)
