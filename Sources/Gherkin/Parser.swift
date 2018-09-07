@@ -33,7 +33,7 @@ func makeParser() -> GherkinConsumer {
 
     let feature: GherkinConsumer = makeLabelAndDescription(startText: "Feature:", ignoreText: "Scenario:" | "Scenario Outline:" | ["@", text])
 
-    let stepKeywords: GherkinConsumer = "Given" | "When" | "Then" | "And" | "But"
+    let stepKeywords: GherkinConsumer = .sequence([whitespace, "Given" | "When" | "Then" | "And" | "But"])
     let step: GherkinConsumer = .label(.step, [stepKeywords, whitespace, text, newLines])
 
     let scenarioName: GherkinConsumer = makeLabelAndDescription(startText: "Scenario:", ignoreText: stepKeywords)
@@ -47,11 +47,13 @@ func makeParser() -> GherkinConsumer {
     let discardedPipe: GherkinConsumer = .discard("|")
 
     let tableRow: GherkinConsumer = [
+        whitespace,
         .interleaved(discardedPipe, text),
         newLines,
     ]
 
     let example: GherkinConsumer = [
+        whitespace,
         .discard("Examples:"),
         newLines,
         .label(.exampleKeys, tableRow),
