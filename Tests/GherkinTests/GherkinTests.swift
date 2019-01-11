@@ -338,6 +338,32 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertTrue(result.scenarios.first?.steps.count == 3)
         XCTAssertEqual(result.scenarios[0].steps[1].docString, "Some Title, Eh?\n===============\nHere is the first paragraph of my blog post. Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.")
     }
+    
+    func testSimpleFeatureWithBackground() throws {
+        //TODO
+        let text = """
+        Feature: Minimal Scenario Outline
+
+        Background:
+        Given this boat
+        And this water
+
+        Scenario: minimalistic
+        Given I am a mountain
+        And I love chocolate
+        """
+        
+        let result = try Feature(text)
+        XCTAssertEqual(result.name, "Minimal Scenario Outline")
+        XCTAssertTrue(result.background != nil)
+        XCTAssertTrue(result.background?.steps.count == 2)
+        XCTAssertTrue(result.background?.steps[0].text == "this boat")
+        XCTAssertTrue(result.background?.steps[0].name == .given)
+        XCTAssertTrue(result.background?.steps[1].text == "this water")
+        XCTAssertTrue(result.background?.steps[1].name == .and)
+        XCTAssertTrue(result.scenarios.count == 1)
+        XCTAssertTrue(result.scenarios.first?.steps.count == 2)
+    }
 
     static var allTests = [
         ("testParsingSimpleFeatureFile", testParsingSimpleFeatureFile),
@@ -355,6 +381,7 @@ final class SwiftGherkinTests: XCTestCase {
         ("testParsingSimpleFeatureFileWithMultipleVariableAndTag", testParsingSimpleFeatureFileWithMultipleVariableAndTag),
         ("testParsingSimpleFeatureFileWithMultipleVariableAndTags", testParsingSimpleFeatureFileWithMultipleVariableAndTags),
         ("testSimpleFeatureWithDataTable", testSimpleFeatureWithDataTable),
-        ("testSimpleFeatureWithDocString", testSimpleFeatureWithDocString)
+        ("testSimpleFeatureWithDocString", testSimpleFeatureWithDocString),
+        ("testSimpleFeatureWithBackground", testSimpleFeatureWithBackground)
     ]
 }

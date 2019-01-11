@@ -2,7 +2,7 @@ import Consumer
 import Foundation
 
 enum GherkinLabel: String {
-    case feature, scenario, scenarioOutline, name, description, tag, step, examples, exampleKeys, exampleValues, dataTableKeys, dataTableValues, docString
+    case feature, background, scenario, scenarioOutline, name, description, tag, step, examples, exampleKeys, exampleValues, dataTableKeys, dataTableValues, docString
 }
 
 typealias GherkinConsumer = Consumer<GherkinLabel>
@@ -31,7 +31,7 @@ func makeParser() -> GherkinConsumer {
 
     let tag: GherkinConsumer = .label(.tag, .sequence([.discard("@"), tagText, .optional(whitespace), .optional(newLines)]))
 
-    let feature: GherkinConsumer = makeLabelAndDescription(startText: "Feature:", ignoreText: "Scenario:" | "Scenario Outline:" | ["@", text])
+    let feature: GherkinConsumer = makeLabelAndDescription(startText: "Feature:", ignoreText: "Scenario:" | "Scenario Outline:" | "Background:" | ["@", text])
 
     let stepKeywords: GherkinConsumer = .sequence([whitespace, "Given" | "When" | "Then" | "And" | "But"])
 
@@ -78,6 +78,12 @@ func makeParser() -> GherkinConsumer {
     
     let step: GherkinConsumer = .label(.step, [stepKeywords, whitespace, text, newLines, .optional(stepArgument)])
     
+    let background: GherkinConsumer = .label(.background, [
+        .zeroOrMore(tag),
+        ["Background:", whitespace, newLines],
+        .oneOrMore(step),
+        ])
+    
     let scenarioName: GherkinConsumer = makeLabelAndDescription(startText: "Scenario:", ignoreText: stepKeywords)
     let scenario: GherkinConsumer = .label(.scenario, [
         .zeroOrMore(tag),
@@ -96,6 +102,7 @@ func makeParser() -> GherkinConsumer {
     let anyScenario: GherkinConsumer = scenario | scenarioOutline
     let gherkin: GherkinConsumer = .label(.feature, [
         feature,
+        .optional(background),
         .oneOrMore(anyScenario),
     ])
     return gherkin

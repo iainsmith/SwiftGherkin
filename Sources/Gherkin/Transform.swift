@@ -16,7 +16,8 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
         var description: String? = values.safely(1) as? String ?? nil
         description?.trimWhitespace()
         let scenarios: [Scenario] = filterd(values, is: Scenario.self)!
-        let feature = Feature(name: name, description: description, scenarios: scenarios)
+        let background: Background? = filterd(values, is: Background.self)?.first
+        let feature = Feature(name: name, description: description, scenarios: scenarios, background: background)
         return feature
     case .step:
         let name = StepName(rawValue: (values[0] as! String).lowercased())!
@@ -40,6 +41,14 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
         }
         
         return Step(name: name, text: text)
+    case .background:
+        let strings: [String] = filterd(values, is: String.self)!
+        let name = strings[0]
+        var description: String? = strings.safely(1) ?? nil
+        description?.trimWhitespace()
+        let steps: [Step] = filterd(values, is: Step.self)!
+        let tags: [Tag]? = filterd(values, is: Tag.self)
+        return Background(name: name, description: description, steps: steps, tags: tags)
     case .scenario:
         let strings: [String] = filterd(values, is: String.self)!
         let name = strings[0]

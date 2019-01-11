@@ -12,11 +12,13 @@ public struct Feature: Codable {
     public var name: String
     public var textDescription: String?
     public var scenarios: [Scenario]
+    public var background: Background?
 
-    public init(name: String, description: String?, scenarios: [Scenario]) {
+    public init(name: String, description: String?, scenarios: [Scenario], background: Background? = nil) {
         self.name = name
         textDescription = description
         self.scenarios = scenarios
+        self.background = background
     }
 
     public init(_ string: String) throws {
@@ -27,11 +29,30 @@ public struct Feature: Codable {
         name = result.name
         textDescription = result.textDescription
         scenarios = result.scenarios
+        background = result.background
     }
 
     public init(_ data: Data) throws {
         guard let text = String(data: data, encoding: .utf8) else { throw GherkinError.standard }
         try self.init(text)
+    }
+}
+
+public struct Background: Codable {
+    
+    public var name: String
+    /// The tags if any for this background
+    public var tags: [Tag]?
+    /// The steps for this background
+    public var steps: [Step]
+    /// The description (if any) for this background
+    public var textDescription: String?
+    
+    public init(name: String, description: String?, steps: [Step], tags: [Tag]? = nil) {
+        self.tags = tags
+        self.name = name
+        self.textDescription = description
+        self.steps = steps
     }
 }
 
