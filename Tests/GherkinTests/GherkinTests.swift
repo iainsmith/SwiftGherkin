@@ -292,6 +292,52 @@ final class SwiftGherkinTests: XCTestCase {
 
         XCTAssertNotNil(feature)
     }
+    
+    func testSimpleFeatureWithDataTable() throws {
+        //TODO
+        let text = """
+        Feature: Minimal Scenario Outline
+
+        Scenario: minimalistic
+        Given I am a mountain
+        And I love chocolate
+        | mountain | chocolate |
+        | etna | cadburys |
+        | peak | galaxy |
+        Then break the jar
+        """
+
+        let result = try Feature(text)
+        XCTAssertEqual(result.name, "Minimal Scenario Outline")
+        XCTAssertTrue(result.scenarios.count == 1)
+        XCTAssertTrue(result.scenarios.first?.steps.count == 3)
+        XCTAssertEqual(result.scenarios[0].steps[1].tableValues![0], ["mountain": "etna", "chocolate": "cadburys"])
+        XCTAssertEqual(result.scenarios[0].steps[1].tableValues![1], ["mountain": "peak", "chocolate": "galaxy"])
+    }
+    
+    func testSimpleFeatureWithDocString() throws {
+        //TODO
+        let text = """
+        Feature: Minimal Scenario Outline
+
+        Scenario: minimalistic
+        Given I am a mountain
+        And I love chocolate
+        \"\"\"
+        Some Title, Eh?
+        ===============
+        Here is the first paragraph of my blog post. Lorem ipsum dolor sit amet,
+        consectetur adipiscing elit.
+        \"\"\"
+        Then break the jar
+        """
+        
+        let result = try Feature(text)
+        XCTAssertEqual(result.name, "Minimal Scenario Outline")
+        XCTAssertTrue(result.scenarios.count == 1)
+        XCTAssertTrue(result.scenarios.first?.steps.count == 3)
+        XCTAssertEqual(result.scenarios[0].steps[1].docString, "Some Title, Eh?\n===============\nHere is the first paragraph of my blog post. Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.")
+    }
 
     static var allTests = [
         ("testParsingSimpleFeatureFile", testParsingSimpleFeatureFile),
@@ -307,6 +353,8 @@ final class SwiftGherkinTests: XCTestCase {
         ("testParsingSimpleFeatureFileWithVariableWithIndentation", testParsingSimpleFeatureFileWithVariableWithIndentation),
         ("testParsingSimpleFeatureFileWithMultipleVariable", testParsingSimpleFeatureFileWithMultipleVariable),
         ("testParsingSimpleFeatureFileWithMultipleVariableAndTag", testParsingSimpleFeatureFileWithMultipleVariableAndTag),
-        ("testParsingSimpleFeatureFileWithMultipleVariableAndTags", testParsingSimpleFeatureFileWithMultipleVariableAndTags)
+        ("testParsingSimpleFeatureFileWithMultipleVariableAndTags", testParsingSimpleFeatureFileWithMultipleVariableAndTags),
+        ("testSimpleFeatureWithDataTable", testSimpleFeatureWithDataTable),
+        ("testSimpleFeatureWithDocString", testSimpleFeatureWithDocString)
     ]
 }

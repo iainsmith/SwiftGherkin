@@ -8,6 +8,7 @@
 import Consumer
 import Foundation
 
+//TODO: Error reporting
 func _transform(label: GherkinLabel, values: [Any]) -> Any? {
     switch label {
     case .feature:
@@ -20,6 +21,24 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
     case .step:
         let name = StepName(rawValue: (values[0] as! String).lowercased())!
         let text = values[1] as! String
+        
+        //handle table
+        if values.count > 2, let keys = values[2] as? [String] {
+            if values.count > 3, let tableValues = values[3] as? [String] {
+                let batches = tableValues.chuncked(by: keys.count)
+                let values: [[String: String]] = batches.map { batch -> [String: String] in
+                    let keysAndValues = zip(keys, batch)
+                    return Dictionary(uniqueKeysWithValues: keysAndValues)
+                }
+                return Step(name: name, text: text, stepArgument: .table(values))
+            }
+        }
+        
+        //handle string
+        if values.count > 2, let string = values[2] as? String {
+            return Step(name: name, text: text, stepArgument: .string(string))
+        }
+        
         return Step(name: name, text: text)
     case .scenario:
         let strings: [String] = filterd(values, is: String.self)!
@@ -55,6 +74,17 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
         return (values as! [String]).map { $0.trimmedWhitespace() }
     case .exampleValues:
         return (values as! [String]).map { $0.trimmedWhitespace() }
+    case .dataTableKeys:
+        return (values as! [String]).map { $0.trimmedWhitespace() }
+    case .dataTableValues:
+        return (values as! [String]).map { $0.trimmedWhitespace() }
+    case .docString:
+        return (values as! [String]).reduce("", { (r, s) -> String in
+            if r == "" {
+                return s
+            }
+            return r + "\n" + s
+        })
     case .tag:
         return Tag((values[0] as! String).trimmedWhitespace())
     }

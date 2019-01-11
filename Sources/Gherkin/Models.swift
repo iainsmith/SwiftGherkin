@@ -133,14 +133,30 @@ public struct Example: Codable {
     }
 }
 
+public enum StepArgument {
+    case table ([[String: String]]?)
+    case string (String?)
+}
+
 /// A gherkin step. e.g 'Given I am on the homepage`
 public struct Step: Codable {
     public var name: StepName
     public var text: String
-
-    public init(name: StepName, text: String) {
+    public var tableValues: [[String: String]]?
+    public var docString: String?
+    
+    public init(name: StepName, text: String, stepArgument: StepArgument? = nil) {
         self.name = name
         self.text = text
+        
+        switch stepArgument {
+        case .table (let t)?:
+            self.tableValues = t
+        case .string (let s)?:
+            self.docString = s
+        case .none:
+            break
+        }
     }
 }
 

@@ -2,7 +2,7 @@ import Consumer
 import Foundation
 
 enum GherkinLabel: String {
-    case feature, scenario, scenarioOutline, name, description, tag, step, examples, exampleKeys, exampleValues
+    case feature, scenario, scenarioOutline, name, description, tag, step, examples, exampleKeys, exampleValues, dataTableKeys, dataTableValues, docString
 }
 
 typealias GherkinConsumer = Consumer<GherkinLabel>
@@ -34,21 +34,21 @@ func makeParser() -> GherkinConsumer {
     let feature: GherkinConsumer = makeLabelAndDescription(startText: "Feature:", ignoreText: "Scenario:" | "Scenario Outline:" | ["@", text])
 
     let stepKeywords: GherkinConsumer = .sequence([whitespace, "Given" | "When" | "Then" | "And" | "But"])
-    let step: GherkinConsumer = .label(.step, [stepKeywords, whitespace, text, newLines])
-
-    let scenarioName: GherkinConsumer = makeLabelAndDescription(startText: "Scenario:", ignoreText: stepKeywords)
-    let scenario: GherkinConsumer = .label(.scenario, [
-        .zeroOrMore(tag),
-        scenarioName,
-        .oneOrMore(step),
-    ]
-    )
 
     let discardedPipe: GherkinConsumer = .discard("|")
+    
+    let discardedTripleQuotes: GherkinConsumer = .discard("\"\"\"")
 
     let tableRow: GherkinConsumer = [
         whitespace,
         .interleaved(discardedPipe, text),
+        newLines,
+    ]
+    
+    let dataTable: GherkinConsumer = [
+        whitespace,
+        .label(.dataTableKeys, tableRow),
+        .label(.dataTableValues, .oneOrMore(tableRow)),
         newLines,
     ]
 
@@ -60,6 +60,30 @@ func makeParser() -> GherkinConsumer {
         .label(.exampleValues, .oneOrMore(tableRow)),
         newLines,
     ]
+    
+    let textBlock: GherkinConsumer = .oneOrMore([.not(discardedTripleQuotes), text, newLines])
+    
+    let docString : GherkinConsumer = [
+        whitespace,
+        discardedTripleQuotes,
+        newLines,
+        .label(.docString, textBlock),
+        discardedTripleQuotes,
+        newLines,
+    ]
+    
+    let stepArgument: GherkinConsumer = [
+        .any([docString, dataTable])
+    ]
+    
+    let step: GherkinConsumer = .label(.step, [stepKeywords, whitespace, text, newLines, .optional(stepArgument)])
+    
+    let scenarioName: GherkinConsumer = makeLabelAndDescription(startText: "Scenario:", ignoreText: stepKeywords)
+    let scenario: GherkinConsumer = .label(.scenario, [
+        .zeroOrMore(tag),
+        scenarioName,
+        .oneOrMore(step),
+    ])
 
     let scenarioOutlineName = makeLabelAndDescription(startText: "Scenario Outline:", ignoreText: stepKeywords)
     let scenarioOutline: GherkinConsumer = .label(.scenarioOutline, [
