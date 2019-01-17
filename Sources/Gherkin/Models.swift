@@ -181,6 +181,16 @@ public struct Step: Codable {
     }
 }
 
+extension Step {
+    func replaceTags(example: Example) -> Step {
+        var newStep = self
+        for key in example.values.keys {
+            newStep.text = newStep.text.replacingOccurrences(of: "<\(key)>", with: example.values[key]!)
+        }
+        return newStep
+    }
+}
+
 public struct Tag: Codable {
     public let name: String
 
