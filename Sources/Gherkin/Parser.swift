@@ -71,6 +71,7 @@ func makeParser() -> GherkinConsumer {
 
     let anyScenario: GherkinConsumer = scenario | scenarioOutline
     let gherkin: GherkinConsumer = .label(.feature, [
+        .zeroOrMore(tag),
         feature,
         .oneOrMore(anyScenario),
     ])

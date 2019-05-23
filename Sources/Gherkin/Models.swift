@@ -12,11 +12,13 @@ public struct Feature: Codable {
     public var name: String
     public var textDescription: String?
     public var scenarios: [Scenario]
+    public var tags: [Tag]?
 
-    public init(name: String, description: String?, scenarios: [Scenario]) {
+    public init(name: String, description: String?, scenarios: [Scenario], tags: [Tag]? = nil) {
         self.name = name
         textDescription = description
         self.scenarios = scenarios
+        self.tags = tags
     }
 
     public init(_ string: String) throws {
@@ -27,6 +29,7 @@ public struct Feature: Codable {
         name = result.name
         textDescription = result.textDescription
         scenarios = result.scenarios
+        tags = result.tags
     }
 
     public init(_ data: Data) throws {
