@@ -196,6 +196,10 @@ public struct Tag: Codable, Hashable {
     public var hashValue: Int {
         return name.hashValue
     }
+    
+    public static func == (lhs: Tag, rhs: Tag) -> Bool {
+        return lhs.name == rhs.name
+    }
 }
 
 /// The Step name
