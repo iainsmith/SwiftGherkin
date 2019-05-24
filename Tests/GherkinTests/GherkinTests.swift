@@ -380,7 +380,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertTrue(result.scenarios.first?.steps.count == 2)
         XCTAssertTrue(result.scenarios.first?.steps[0].text == "I am a mountain")
         XCTAssertEqual(result.scenarios[0].name, "minimalistic")
-        XCTAssertEqual(result.scenarios[0].tags!.map { $0.name }, ["testTag2", "testTag3"])
+        XCTAssertEqual(result.scenarios[0].tags!.map { $0.name }, ["testTag", "testTag2", "testTag3"])
     }
 
     func testCreatingAFeatureInCode() {
