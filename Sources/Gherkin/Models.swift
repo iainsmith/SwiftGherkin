@@ -26,7 +26,7 @@ public struct Feature: Codable {
             throw GherkinError.standard
         }
         
-        let updatedScenarios: [Scenario] = result.scenarios.compactMap { scenario in
+        let updatedScenarios: [Scenario] = result.scenarios.flatMap { scenario in
             var finalScenario: Scenario
             
             switch scenario {
@@ -191,6 +191,10 @@ public struct Tag: Codable, Hashable {
 
     public init(_ name: String) {
         self.name = name
+    }
+    
+    public var hashValue: Int {
+        return name.hashValue
     }
 }
 
