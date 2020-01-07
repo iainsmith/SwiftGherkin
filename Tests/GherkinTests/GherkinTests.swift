@@ -19,7 +19,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertTrue(result.scenarios.first?.steps[0].text == "I am a mountain")
         XCTAssertEqual(result.scenarios[0].name, "minimalistic")
     }
-    
+
     func testParsingSimpleFeatureFileWithIndentation() throws {
         let text = """
         Feature: Minimal Scenario Outline
@@ -28,7 +28,7 @@ final class SwiftGherkinTests: XCTestCase {
             Given I am a mountain
             And I love chocolate
         """
-        
+
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
@@ -171,7 +171,7 @@ final class SwiftGherkinTests: XCTestCase {
         let json = try JSONEncoder().encode(result)
         XCTAssertNotNil(json)
     }
-    
+
     func testParsingSimpleFeatureFileWithVariableWithIndentation() throws {
         let text = """
         Feature: Minimal Scenario Outline
@@ -188,7 +188,7 @@ final class SwiftGherkinTests: XCTestCase {
                 | another  |
                 | another  |
         """
-        
+
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
@@ -196,7 +196,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].steps[0].text, "I am a <mountain>")
         XCTAssertEqual(result.scenarios[0].examples!.count, 5)
         XCTAssertEqual(result.scenarios[0].examples![0].values, ["mountain": "etna"])
-        
+
         let json = try JSONEncoder().encode(result)
         XCTAssertNotNil(json)
     }
@@ -286,9 +286,9 @@ final class SwiftGherkinTests: XCTestCase {
                                                                  Step(name: .when, text: "I tap register"),
                                                                  Step(name: .and, text: "I enter valid registration details"),
                                                                  Step(name: .then, text: "I am shown the registration confirmation screen"),
-                                      ])),
+                                                             ])),
 
-        ])
+                              ])
 
         XCTAssertNotNil(feature)
     }
@@ -307,6 +307,6 @@ final class SwiftGherkinTests: XCTestCase {
         ("testParsingSimpleFeatureFileWithVariableWithIndentation", testParsingSimpleFeatureFileWithVariableWithIndentation),
         ("testParsingSimpleFeatureFileWithMultipleVariable", testParsingSimpleFeatureFileWithMultipleVariable),
         ("testParsingSimpleFeatureFileWithMultipleVariableAndTag", testParsingSimpleFeatureFileWithMultipleVariableAndTag),
-        ("testParsingSimpleFeatureFileWithMultipleVariableAndTags", testParsingSimpleFeatureFileWithMultipleVariableAndTags)
+        ("testParsingSimpleFeatureFileWithMultipleVariableAndTags", testParsingSimpleFeatureFileWithMultipleVariableAndTags),
     ]
 }

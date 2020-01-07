@@ -33,6 +33,14 @@ public struct Feature: Codable {
         guard let text = String(data: data, encoding: .utf8) else { throw GherkinError.standard }
         try self.init(text)
     }
+
+    public init(_ filePath: String, featurePath: String) throws {
+        let url = URL(fileURLWithPath: filePath)
+            .deletingLastPathComponent()
+            .appendingPathComponent(featurePath, isDirectory: false)
+        let fileContent = try String(contentsOfFile: url.path)
+        try self.init(fileContent)
+    }
 }
 
 /// A scenario that is either a Gherkin Scenario: or a Scenario Outline:
@@ -137,10 +145,16 @@ public struct Example: Codable {
 public struct Step: Codable {
     public var name: StepName
     public var text: String
+    public var examples: [Example]?
 
-    public init(name: StepName, text: String) {
+    public init(name: StepName, text: String, examples: [Example]?) {
         self.name = name
         self.text = text
+        self.examples = examples
+    }
+
+    public init(name: StepName, text: String) {
+        self.init(name: name, text: text, examples: nil)
     }
 }
 

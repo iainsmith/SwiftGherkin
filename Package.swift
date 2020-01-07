@@ -14,9 +14,11 @@ let package = Package(
     targets: [
         .target(
             name: "Gherkin",
-            dependencies: ["Consumer"]),
+            dependencies: ["Consumer"]
+        ),
         .testTarget(
             name: "GherkinTests",
-            dependencies: ["Gherkin"]),
+            dependencies: ["Gherkin"]
+        ),
     ]
 )
