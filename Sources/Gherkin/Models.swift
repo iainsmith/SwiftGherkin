@@ -25,20 +25,20 @@ public struct Feature: Codable {
         guard let result = try gherkin.match(string).transform(_transform) as? Feature else {
             throw GherkinError.standard
         }
-        
+
         let updatedScenarios: [Scenario] = result.scenarios.compactMap { scenario in
             var finalScenario: Scenario
-            
+
             switch scenario {
             case let .simple(simpleScenario):
                 finalScenario = Feature.include(featureTags: result.tags, on: simpleScenario)
             case let .outline(outlineScenario):
                 finalScenario = Feature.include(featureTags: result.tags, on: outlineScenario)
             }
-            
+
             return finalScenario
         }
-        
+
         name = result.name
         textDescription = result.textDescription
         scenarios = updatedScenarios
@@ -49,20 +49,20 @@ public struct Feature: Codable {
         guard let text = String(data: data, encoding: .utf8) else { throw GherkinError.standard }
         try self.init(text)
     }
-    
+
     private static func include(featureTags: [Tag]?, on simpleScenario: ScenarioSimple) -> Scenario {
         let newTags = merge(featureTags: featureTags, and: simpleScenario.tags)
-        
+
         let newScenario = ScenarioSimple(name: simpleScenario.name,
                                          description: simpleScenario.textDescription,
                                          steps: simpleScenario.steps,
                                          tags: newTags)
         return Scenario.simple(newScenario)
     }
-    
+
     private static func include(featureTags: [Tag]?, on outlineScenario: ScenarioOutline) -> Scenario {
         let newTags = merge(featureTags: featureTags, and: outlineScenario.tags)
-        
+
         let newScenario = ScenarioOutline(name: outlineScenario.name,
                                           description: outlineScenario.textDescription,
                                           steps: outlineScenario.steps,
@@ -70,10 +70,18 @@ public struct Feature: Codable {
                                           tags: newTags)
         return Scenario.outline(newScenario)
     }
-    
+
     private static func merge(featureTags: [Tag]?, and scenarioTags: [Tag]?) -> [Tag]? {
         let setTag: Set<Tag> = Set((featureTags ?? []) + (scenarioTags ?? []))
         return Array(setTag).sorted { $0.name < $1.name }
+    }
+
+    public init(_ filePath: String, featurePath: String) throws {
+        let url = URL(fileURLWithPath: filePath)
+            .deletingLastPathComponent()
+            .appendingPathComponent(featurePath, isDirectory: false)
+        let fileContent = try String(contentsOfFile: url.path)
+        try self.init(fileContent)
     }
 }
 
@@ -179,10 +187,16 @@ public struct Example: Codable {
 public struct Step: Codable {
     public var name: StepName
     public var text: String
+    public var examples: [Example]?
 
-    public init(name: StepName, text: String) {
+    public init(name: StepName, text: String, examples: [Example]?) {
         self.name = name
         self.text = text
+        self.examples = examples
+    }
+
+    public init(name: StepName, text: String) {
+        self.init(name: name, text: text, examples: nil)
     }
 }
 
@@ -194,13 +208,13 @@ public struct Tag: Codable, Hashable {
     }
 
     #if !compiler(>=5)
-    public var hashValue: Int {
-        return name.hashValue
-    }
+        public var hashValue: Int {
+            name.hashValue
+        }
 
-    public static func == (lhs: Tag, rhs: Tag) -> Bool {
-        return lhs.name == rhs.name
-    }
+        public static func == (lhs: Tag, rhs: Tag) -> Bool {
+            lhs.name == rhs.name
+        }
     #endif
 }
 

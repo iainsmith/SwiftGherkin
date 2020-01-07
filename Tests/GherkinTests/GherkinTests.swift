@@ -19,7 +19,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertTrue(result.scenarios.first?.steps[0].text == "I am a mountain")
         XCTAssertEqual(result.scenarios[0].name, "minimalistic")
     }
-    
+
     func testParsingSimpleFeatureFileWithIndentation() throws {
         let text = """
         Feature: Minimal Scenario Outline
@@ -28,7 +28,7 @@ final class SwiftGherkinTests: XCTestCase {
             Given I am a mountain
             And I love chocolate
         """
-        
+
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
@@ -40,7 +40,7 @@ final class SwiftGherkinTests: XCTestCase {
     func testParsingSimpleFeatureFileWithTag() throws {
         let text = """
         Feature: Minimal Scenario Outline
-        
+
         @testTag
         Scenario: minimalistic
         Given I am a mountain
@@ -55,17 +55,17 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].name, "minimalistic")
         XCTAssertEqual(result.scenarios[0].tags?[0].name, "testTag")
     }
-    
+
     func testParsingSimpleFeatureFileWithTagBeforeFeature() throws {
         let text = """
         @testTag
         Feature: Minimal Scenario Outline
-        
+
         Scenario: minimalistic
         Given I am a mountain
         And I love chocolate
         """
-        
+
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertEqual(result.tags?[0].name, "testTag")
@@ -78,7 +78,7 @@ final class SwiftGherkinTests: XCTestCase {
     func testParsingSimpleFeatureFileWithMultipleTags() throws {
         let text = """
         Feature: Minimal Scenario Outline
-        
+
         @testTag @testTag2
         Scenario: minimalistic
         Given I am a mountain
@@ -93,17 +93,17 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].name, "minimalistic")
         XCTAssertEqual(result.scenarios[0].tags!.map { $0.name }, ["testTag", "testTag2"])
     }
-    
+
     func testParsingSimpleFeatureFileWithMultipleTagsBeforeFeature() throws {
         let text = """
         @testTag @testTag2
         Feature: Minimal Scenario Outline
-        
+
         Scenario: minimalistic
         Given I am a mountain
         And I love chocolate
         """
-        
+
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertEqual(result.tags!.map { $0.name }, ["testTag", "testTag2"])
@@ -209,7 +209,7 @@ final class SwiftGherkinTests: XCTestCase {
         let json = try JSONEncoder().encode(result)
         XCTAssertNotNil(json)
     }
-    
+
     func testParsingSimpleFeatureFileWithVariableWithIndentation() throws {
         let text = """
         Feature: Minimal Scenario Outline
@@ -226,7 +226,7 @@ final class SwiftGherkinTests: XCTestCase {
                 | another  |
                 | another  |
         """
-        
+
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertTrue(result.scenarios.count == 1)
@@ -234,7 +234,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].steps[0].text, "I am a <mountain>")
         XCTAssertEqual(result.scenarios[0].examples!.count, 5)
         XCTAssertEqual(result.scenarios[0].examples![0].values, ["mountain": "etna"])
-        
+
         let json = try JSONEncoder().encode(result)
         XCTAssertNotNil(json)
     }
@@ -286,7 +286,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].examples![1].values, ["mountain": "peak", "chocolate": "galaxy"])
         XCTAssertEqual(result.scenarios[0].tags?[0].name, "testTag")
     }
-    
+
     func testParsingSimpleFeatureFileWithMultipleVariableAndTagBeforeFeature() throws {
         let text = """
         @testTag
@@ -301,7 +301,7 @@ final class SwiftGherkinTests: XCTestCase {
         | etna | cadburys |
         | peak | galaxy |
         """
-        
+
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertEqual(result.tags?[0].name, "testTag")
@@ -336,7 +336,7 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].examples![1].values, ["mountain": "peak", "chocolate": "galaxy"])
         XCTAssertEqual(result.scenarios[0].tags!.map { $0.name }, ["testTag", "testTag2", "testTag3"])
     }
-    
+
     func testParsingSimpleFeatureFileWithMultipleVariableAndTagsBeforeFeature() throws {
         let text = """
         @testTag @testTag2 @testTag3
@@ -351,7 +351,7 @@ final class SwiftGherkinTests: XCTestCase {
         | etna | cadburys |
         | peak | galaxy |
         """
-        
+
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertEqual(result.tags!.map { $0.name }, ["testTag", "testTag2", "testTag3"])
@@ -361,18 +361,18 @@ final class SwiftGherkinTests: XCTestCase {
         XCTAssertEqual(result.scenarios[0].examples![0].values, ["mountain": "etna", "chocolate": "cadburys"])
         XCTAssertEqual(result.scenarios[0].examples![1].values, ["mountain": "peak", "chocolate": "galaxy"])
     }
-    
+
     func testParsingSimpleFeatureFileWithTagsBeforeFeatureAndBeforeScenario() throws {
         let text = """
         @testTag @testTag2
         Feature: Minimal Scenario Outline
-        
+
         @testTag2 @testTag3
         Scenario: minimalistic
         Given I am a mountain
         And I love chocolate
         """
-        
+
         let result = try Feature(text)
         XCTAssertEqual(result.name, "Minimal Scenario Outline")
         XCTAssertEqual(result.tags!.map { $0.name }, ["testTag", "testTag2"])
@@ -395,10 +395,36 @@ final class SwiftGherkinTests: XCTestCase {
                                                                  Step(name: .when, text: "I tap register"),
                                                                  Step(name: .and, text: "I enter valid registration details"),
                                                                  Step(name: .then, text: "I am shown the registration confirmation screen"),
-                                      ])),
+                                                             ])),
 
-        ])
+                              ])
 
         XCTAssertNotNil(feature)
+    }
+
+    func testLoadShouldSucceed() {
+        let feature = try? Feature(#file, featurePath: "features/MyTest.feature")
+        XCTAssertNotNil(feature)
+    }
+
+    func testLoadShouldFailWhenFeaturePathIsNotCorrect() {
+        XCTAssertThrowsError(try Feature(#file, featurePath: "features/false.feature")) { error in
+            XCTAssertNotNil(error)
+        }
+    }
+
+    func testLoadShouldSuccessWithData() {
+        let url = URL(fileURLWithPath: #file)
+            .deletingLastPathComponent()
+            .appendingPathComponent("features/MyTest.feature", isDirectory: false)
+        let data = try? Data(contentsOf: url)
+        let feature = try? Feature(data!)
+        XCTAssertNotNil(feature)
+    }
+
+    func testLoadShouldFailWithBadData() {
+        XCTAssertThrowsError(try Feature("test".data(using: .utf8)!)) { error in
+            XCTAssertNotNil(error)
+        }
     }
 }
