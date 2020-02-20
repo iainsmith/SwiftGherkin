@@ -29,7 +29,6 @@ class GherkinScenarioTests: XCTestCase {
     func testStepBadRegex() {
         XCTAssertThrowsError(try scenario.step(for: "[")) { error in
             XCTAssertNotNil(error)
-            XCTAssertEqual((error as NSError).code, 2048)
         }
     }
 

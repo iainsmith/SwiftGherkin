@@ -25,7 +25,6 @@ class GherkinFeatureTests: XCTestCase {
     func testScenarioBadRegex() {
         XCTAssertThrowsError(try feature.scenario(for: "[")) { error in
             XCTAssertNotNil(error)
-            XCTAssertEqual((error as NSError).code, 2048)
         }
     }
 

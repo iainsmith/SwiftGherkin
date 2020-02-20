@@ -10,7 +10,7 @@ class GherkinLoadFeatureTests: XCTestCase {
 
     func testLoadShouldFailWhenFeaturePathIsNotCorrect() {
         XCTAssertThrowsError(try Feature(#file, featurePath: "features/false.feature")) { error in
-            XCTAssertEqual((error as NSError).code, 260)
+            XCTAssertNotNil(error)
         }
     }
 }
