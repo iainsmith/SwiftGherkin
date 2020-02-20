@@ -83,8 +83,8 @@ extension SearchError: Equatable {
 }
 
 public struct SearchResult {
-    let matches: [String]?
-    let step: Step
+    public let matches: [String]?
+    public let step: Step
 }
 
 /// A completion used at the end of every search: it will generate a Result

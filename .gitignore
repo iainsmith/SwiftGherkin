@@ -4,3 +4,4 @@
 /*.xcodeproj
 xcov_report/*
 .ruby-version
+/.swiftpm
