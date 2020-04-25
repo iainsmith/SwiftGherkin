@@ -17,7 +17,7 @@ do {
   let text = """
              Feature: Registration
              Users may want to register to save lists
-             
+
              Scenario: Successful registration
              Given I am on the registration screen
              When I enter <email> into the email field
@@ -48,7 +48,7 @@ The `Scenario` type is an enum that has two cases `.simple(ScenarioSimple)` & `.
 To install using Swift Package Manager, add this to the dependencies: section in your Package.swift file:
 
 ```swift
-.package(url: "https://github.com/iainsmith/SwiftGherkin.git", .upToNextMinor(from: "0.1.0")),
+.package(url: "https://github.com/iainsmith/SwiftGherkin.git", .upToNextMinor(from: "0.2.0")),
 ```
 
 <details>
@@ -63,7 +63,7 @@ let package = Package(
             targets: ["MyPackage"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/iainsmith/SwiftGherkin.git", .upToNextMinor(from: "0.1.0")),
+        .package(url: "https://github.com/iainsmith/SwiftGherkin.git", .upToNextMinor(from: "0.2.0")),
     ],
     targets: [
         .target(
