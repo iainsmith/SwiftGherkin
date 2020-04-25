@@ -11,11 +11,13 @@ import Foundation
 func _transform(label: GherkinLabel, values: [Any]) -> Any? {
     switch label {
     case .feature:
-        guard let name = values.first as? String else { return nil }
+        let strings: [String] = filterd(values, is: String.self)!
+        guard let name = strings.first as? String else { return nil }
         var description: String? = values.safely(1) as? String ?? nil
         description?.trimWhitespace()
         let scenarios: [Scenario] = filterd(values, is: Scenario.self)!
-        let feature = Feature(name: name, description: description, scenarios: scenarios)
+        let tags: [Tag]? = filterd(values, is: Tag.self)
+        let feature = Feature(name: name, description: description, scenarios: scenarios, tags: tags)
         return feature
     case .step:
         let name = StepName(rawValue: (values[0] as! String).lowercased())!

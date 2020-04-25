@@ -12,26 +12,68 @@ public struct Feature: Codable {
     public var name: String
     public var textDescription: String?
     public var scenarios: [Scenario]
+    public var tags: [Tag]?
 
-    public init(name: String, description: String?, scenarios: [Scenario]) {
+    public init(name: String, description: String?, scenarios: [Scenario], tags: [Tag]? = nil) {
         self.name = name
         textDescription = description
         self.scenarios = scenarios
+        self.tags = tags
     }
 
     public init(_ string: String) throws {
         guard let result = try gherkin.match(string).transform(_transform) as? Feature else {
             throw GherkinError.standard
         }
-
+        
+        let updatedScenarios: [Scenario] = result.scenarios.flatMap { scenario in
+            var finalScenario: Scenario
+            
+            switch scenario {
+            case let .simple(simpleScenario):
+                finalScenario = Feature.include(featureTags: result.tags, on: simpleScenario)
+            case let .outline(outlineScenario):
+                finalScenario = Feature.include(featureTags: result.tags, on: outlineScenario)
+            }
+            
+            return finalScenario
+        }
+        
         name = result.name
         textDescription = result.textDescription
-        scenarios = result.scenarios
+        scenarios = updatedScenarios
+        tags = result.tags
     }
 
     public init(_ data: Data) throws {
         guard let text = String(data: data, encoding: .utf8) else { throw GherkinError.standard }
         try self.init(text)
+    }
+    
+    private static func include(featureTags: [Tag]?, on simpleScenario: ScenarioSimple) -> Scenario {
+        let newTags = merge(featureTags: featureTags, and: simpleScenario.tags)
+        
+        let newScenario = ScenarioSimple(name: simpleScenario.name,
+                                         description: simpleScenario.textDescription,
+                                         steps: simpleScenario.steps,
+                                         tags: newTags)
+        return Scenario.simple(newScenario)
+    }
+    
+    private static func include(featureTags: [Tag]?, on outlineScenario: ScenarioOutline) -> Scenario {
+        let newTags = merge(featureTags: featureTags, and: outlineScenario.tags)
+        
+        let newScenario = ScenarioOutline(name: outlineScenario.name,
+                                          description: outlineScenario.textDescription,
+                                          steps: outlineScenario.steps,
+                                          examples: outlineScenario.examples,
+                                          tags: newTags)
+        return Scenario.outline(newScenario)
+    }
+    
+    private static func merge(featureTags: [Tag]?, and scenarioTags: [Tag]?) -> [Tag]? {
+        let setTag: Set<Tag> = Set((featureTags ?? []) + (scenarioTags ?? []))
+        return Array(setTag).sorted { $0.name < $1.name }
     }
 }
 
@@ -144,11 +186,19 @@ public struct Step: Codable {
     }
 }
 
-public struct Tag: Codable {
+public struct Tag: Codable, Hashable {
     public let name: String
 
     public init(_ name: String) {
         self.name = name
+    }
+    
+    public var hashValue: Int {
+        return name.hashValue
+    }
+    
+    public static func == (lhs: Tag, rhs: Tag) -> Bool {
+        return lhs.name == rhs.name
     }
 }
 
