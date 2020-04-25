@@ -108,6 +108,10 @@ If you'd like to add a different feature to this library, please raise an issue 
 
 Gherkin is built on top of a parser generator called [Consumer](https://github.com/nicklockwood/Consumer) by Nick Lockwood.
 
+## Supported swift versions
+
+SwiftGherkin currently supports swift 4.2 and higher.
+
 ## Versioning Notes
 
 The `Feature` type conforms to Codable. It's likely that the JSON representation will not be compatible between versions.
