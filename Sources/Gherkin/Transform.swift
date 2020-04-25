@@ -12,7 +12,7 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
     switch label {
     case .feature:
         let strings: [String] = filterd(values, is: String.self)!
-        guard let name = strings.first as? String else { return nil }
+        guard let name = strings.first else { return nil }
         var description: String? = values.safely(1) as? String ?? nil
         description?.trimWhitespace()
         let scenarios: [Scenario] = filterd(values, is: Scenario.self)!
