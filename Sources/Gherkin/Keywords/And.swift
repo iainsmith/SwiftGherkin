@@ -22,6 +22,6 @@ import Foundation
 ///   - scenario: the scenario that contains the searched step
 ///   - string: the regex to describe the step (we add ^ and $ at the beginning and end of every regex and it is case insensitive)
 ///   - completion: the completion that will be executed at the end of the search with a `Result<SearchResult, SearchError>`
-public func And(_ scenario: Scenario, _ string: String, _ completion: GherkinRegexCompletion) {
-    search(scenario, string, .and, completion)
+public func And(_ scenario: Scenario, _ string: String) -> GherkinSearchResult {
+    return search(scenario, string, .and)
 }

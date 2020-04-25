@@ -91,7 +91,8 @@ public struct SearchResult {
 /// In case of success, the Result contains every string that was a match i.e.:
 /// If you search for "I am a given with value (\\d)" in a text like "I am a given with value 2", you will have 2 strings in the array:
 /// "I am a given with value 2" and "2"
-public typealias GherkinRegexCompletion = (Result<SearchResult, SearchError>) -> Void
+public typealias GherkinSearchResult = Result<SearchResult, SearchError>
+public typealias GherkinRegexCompletion = (GherkinSearchResult) -> Void
 
 /// Search for a step in a scenario
 /// - Parameters:
@@ -99,17 +100,18 @@ public typealias GherkinRegexCompletion = (Result<SearchResult, SearchError>) ->
 ///   - text: the regex
 ///   - stepName: the type of step (i.e.: Given, Then, etc.)
 ///   - completion: the completion executed at the end of the search
-func search(_ scenario: Scenario, _ text: String, _ stepName: StepName, _ completion: GherkinRegexCompletion) {
+func search(_ scenario: Scenario, _ text: String, _ stepName: StepName) -> GherkinSearchResult {
     do {
         guard let result = try scenario.step(for: text),
             result.step.name == stepName else {
-            completion(.failure(.badStep))
-            return
+            return .failure(.badStep)
+//            completion(.failure(.badStep))
         }
-        completion(.success(result))
+        return .success(result)
     } catch SearchError.notFound {
-        completion(.failure(.notFound))
+        return .failure(.notFound)
     } catch {
-        completion(.failure(SearchError.invalidRegex(error)))
+        return .failure(SearchError.invalidRegex(error))
     }
 }
+
