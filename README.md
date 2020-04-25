@@ -112,6 +112,10 @@ Gherkin is built on top of a parser generator called [Consumer](https://github.c
 
 SwiftGherkin currently supports swift 4.2 and higher.
 
+## Adding new tests
+
+If you add new tests, run `swift test --generate-linuxmain` to make sure they are added to the `XCTestManifests.swift` file.
+
 ## Versioning Notes
 
 The `Feature` type conforms to Codable. It's likely that the JSON representation will not be compatible between versions.

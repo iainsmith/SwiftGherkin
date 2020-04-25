@@ -1,6 +1,8 @@
-@testable import GherkinTests
 import XCTest
 
-XCTMain([
-    testCase(SwiftGherkinTests.allTests),
-])
+import GherkinTests
+
+var tests = [XCTestCaseEntry]()
+tests += GherkinTests.__allTests()
+
+XCTMain(tests)

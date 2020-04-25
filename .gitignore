@@ -1,7 +1,8 @@
-.DS_Store
+DS_Store
 /.build
 /Packages
 /*.xcodeproj
 xcov_report/*
 .ruby-version
 .swiftpm
+.swift-version

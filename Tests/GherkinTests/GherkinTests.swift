@@ -401,26 +401,4 @@ final class SwiftGherkinTests: XCTestCase {
 
         XCTAssertNotNil(feature)
     }
-
-    static var allTests = [
-        ("testParsingSimpleFeatureFile", testParsingSimpleFeatureFile),
-        ("testParsingSimpleFeatureFileWithIndentation", testParsingSimpleFeatureFileWithIndentation),
-        ("testParsingSimpleFeatureFileWithTag", testParsingSimpleFeatureFileWithTag),
-        ("testParsingSimpleFeatureFileWithTagBeforeFeature", testParsingSimpleFeatureFileWithTagBeforeFeature),
-        ("testParsingSimpleFeatureFileWithMultipleTags", testParsingSimpleFeatureFileWithMultipleTags),
-        ("testParsingSimpleFeatureFileWithMultipleTagsBeforeFeature", testParsingSimpleFeatureFileWithMultipleTagsBeforeFeature),
-        ("testParsingSimpleFeatureFileWithVariable", testParsingSimpleFeatureFileWithVariable),
-        ("testParsingFeatureFileWithMultipleScenarios", testParsingFeatureFileWithMultipleScenarios),
-        ("testParsingFeatureFileWithDescription", testParsingFeatureFileWithDescription),
-        ("testParsingFeatureFileWithMultiLineDescription", testParsingFeatureFileWithMultiLineDescription),
-        ("testParsingFeatureFileWithScenarioDescription", testParsingFeatureFileWithScenarioDescription),
-        ("testParsingSimpleFeatureFileWithVariable", testParsingSimpleFeatureFileWithVariable),
-        ("testParsingSimpleFeatureFileWithVariableWithIndentation", testParsingSimpleFeatureFileWithVariableWithIndentation),
-        ("testParsingSimpleFeatureFileWithMultipleVariable", testParsingSimpleFeatureFileWithMultipleVariable),
-        ("testParsingSimpleFeatureFileWithMultipleVariableAndTag", testParsingSimpleFeatureFileWithMultipleVariableAndTag),
-        ("testParsingSimpleFeatureFileWithMultipleVariableAndTagBeforeFeature", testParsingSimpleFeatureFileWithMultipleVariableAndTagBeforeFeature),
-        ("testParsingSimpleFeatureFileWithMultipleVariableAndTags", testParsingSimpleFeatureFileWithMultipleVariableAndTags),
-        ("testParsingSimpleFeatureFileWithMultipleVariableAndTagsBeforeFeature", testParsingSimpleFeatureFileWithMultipleVariableAndTagsBeforeFeature),
-        ("testParsingSimpleFeatureFileWithTagsBeforeFeatureAndBeforeScenario", testParsingSimpleFeatureFileWithTagsBeforeFeatureAndBeforeScenario)
-    ]
 }
