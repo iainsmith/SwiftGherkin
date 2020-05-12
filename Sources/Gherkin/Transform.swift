@@ -22,7 +22,8 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
     case .step:
         let name = StepName(rawValue: (values[0] as! String).lowercased())!
         let text = values[1] as! String
-        return Step(name: name, text: text)
+        let examples = (values.last as? [Example]) ?? nil
+        return Step(name: name, text: text, examples: examples)
     case .scenario:
         let strings: [String] = filterd(values, is: String.self)!
         let name = strings[0]
@@ -44,7 +45,13 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
         return values.first
     case .description:
         return values.first
-    case .examples:
+    case .exampleKeys:
+        return (values as! [String]).map { $0.trimmedWhitespace() }
+    case .exampleValues:
+        return (values as! [String]).map { $0.trimmedWhitespace() }
+    case .tag:
+        return Tag((values[0] as! String).trimmedWhitespace())
+    case .example, .examples:
         let keys = values[0] as! [String]
         let exampleValues = values[1] as! [String]
         let batches = exampleValues.chuncked(by: keys.count)
@@ -53,12 +60,6 @@ func _transform(label: GherkinLabel, values: [Any]) -> Any? {
             return Dictionary(uniqueKeysWithValues: keysAndValues)
         }
         return examples.map { Example(values: $0) }
-    case .exampleKeys:
-        return (values as! [String]).map { $0.trimmedWhitespace() }
-    case .exampleValues:
-        return (values as! [String]).map { $0.trimmedWhitespace() }
-    case .tag:
-        return Tag((values[0] as! String).trimmedWhitespace())
     }
 }
 
@@ -68,7 +69,7 @@ extension String {
     }
 
     func trimmedWhitespace() -> String {
-        return trimmingCharacters(in: .whitespacesAndNewlines)
+        trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
 
@@ -87,7 +88,7 @@ extension Array {
     }
 
     func chuncked(by: Int) -> [[Element]] {
-        return stride(from: 0, to: count, by: by).map { current in
+        stride(from: 0, to: count, by: by).map { current in
             let end = current + by
             return Array(self[current ..< end])
         }

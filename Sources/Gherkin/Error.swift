@@ -7,4 +7,5 @@
 
 enum GherkinError: Error {
     case standard
+    case noFile(path: String)
 }
